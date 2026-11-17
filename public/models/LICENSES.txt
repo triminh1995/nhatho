@@ -1,0 +1,42 @@
+# Giấy phép mô hình 3D dùng trong public/models/
+
+## Mô hình tải ngoài (CC0)
+
+Các file sau thuộc **Nature Kit 2.1** của **Kenney** (https://kenney.nl/assets/nature-kit),
+giấy phép **CC0 1.0 Universal** (https://creativecommons.org/publicdomain/zero/1.0/) —
+miễn phí cho mọi mục đích, không bắt buộc ghi công. Tải ngày 2026-11-07 qua các
+repo GitHub phân phối lại nguyên bản (đã đối chiếu SHA-256 với bảng hash của
+archive chính thức kenney_nature-kit.zip cho tree-oak, tree-pine, grotto-cliff):
+
+| File trong dự án | Tên gốc trong Nature Kit | Dùng cho |
+|---|---|---|
+| tree-oak.glb | tree_oak.glb | cây sồi sân trước |
+| tree-pine.glb | tree_pineRoundC.glb | cây thông sân trước |
+| grotto-cliff.glb | cliff_blockCave_rock.glb | vách hang đá Đức Mẹ |
+| bush.glb | plant_bushDetailed.glb | bụi cây trang trí |
+| flower-red.glb | flower_redA.glb | hoa trang trí |
+| flower-yellow.glb | flower_yellowB.glb | hoa trang trí |
+| flower-purple.glb | flower_purpleA.glb | hoa trang trí |
+| fence.glb | fence_simple.glb | hàng rào quanh sân |
+
+Nguồn phân phối lại:
+- https://github.com/Ac-spider/creator-exam-3d (tree-oak, tree-pine, grotto-cliff)
+- https://github.com/aeytechnologiesllc/sunrise-farm (bush, flowers, fence)
+
+## Mô hình tự dựng (nguyên bản của dự án)
+
+Mọi file .glb còn lại (avatar-nu, avatar-nam, pew, kneeler, altar, pieta, rack2,
+rack3, altar-tray, organ, stairs, crypt-door, door-main, columbarium,
+memorial-table, donate-board, column, tree, statue) do dự án tự dựng bằng
+tools/build-models.mjs (three.js + GLTFExporter), không sao chép tài sản của
+bất kỳ trang web/tác giả nào khác.
+
+statue-mary.glb, statue-joseph.glb, statue.glb (yard saints), pieta.glb,
+altar.glb, kneeler.glb, stairs.glb, column.glb and all other *.glb in
+this folder not listed above: original models procedurally built by
+this project's own tools/build-models.mjs (no third-party asset).
+Note: ready-made saint/Mary statues with a clean free license were
+searched for (Sketchfab/Poly Pizza/Quaternius/Kenney) but none was
+available with verifiable CC0/CC-BY terms and a direct GLB download,
+so the statues are sculpted in code instead (lathe profiles with
+azimuthal fold modulation, geometric facial features).

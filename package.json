@@ -1,0 +1,16 @@
+{
+  "name": "nha-tho-online-3d",
+  "version": "1.0.0",
+  "description": "Nhà Thờ Online 3D — nhà thờ Đức Bà Sài Gòn ba chiều, nhiều người cùng vào (Three.js + WebSocket)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.187.0",
+    "ws": "^8.22.1"
+  }
+}
