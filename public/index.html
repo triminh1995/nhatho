@@ -16,9 +16,9 @@
   .hidden{display:none !important;}
 
   /* ---------- Màn hình tải dữ liệu (tự vào nhà thờ, không cần bấm nút) ---------- */
-  #loading{position:fixed; inset:0; overflow-y:auto; background:radial-gradient(120% 90% at 50% 0%, #251a0f 0%, #16100a 55%, #0a0605 100%); color:var(--paper); padding:34px 16px 44px; z-index:60; transition:opacity .7s ease;}
+  #loading{position:fixed; inset:0; height:100vh; height:100dvh; /* (v95) dvh nhu panelWrap */ overflow-y:auto; display:flex; flex-direction:column; background:radial-gradient(120% 90% at 50% 0%, #251a0f 0%, #16100a 55%, #0a0605 100%); color:var(--paper); padding:34px 16px 44px; z-index:60; transition:opacity .7s ease;}
   #loading.done{opacity:0; pointer-events:none;}
-  .load-inner{max-width:680px; margin:0 auto;}
+  .load-inner{max-width:680px; width:100%; margin:auto;} /* (v94) khoi noi dung man hinh cho (Thanh Gia + hai nut + Nhin de vao + cau Loi Chua) nam GIUA MAN HINH theo chieu doc theo yeu cau cua Tri (anh 547); man hinh thap qua thi margin auto ve 0 va cuon tu dau nhu cu */
   .cross-mark{position:relative; width:fit-content; margin:6px auto 12px; line-height:0;} /* (v93) Thanh Gia SVG dang loe dau, sang dan tu duoi len theo tien trinh tai */
   .cross-mark svg{display:block; height:118px; width:auto;}
   .cross-mark .cm-base{display:block;}
@@ -159,7 +159,8 @@
   /* (v71) CSS vệt sáng .ic-streak + @keyframes icRise ĐÃ GỠ cùng #introCross */
 
   /* ---------- HUD trong nhà thờ ---------- */
-  #scene3d{position:fixed; inset:0;}
+  #scene3d{position:fixed; inset:0; touch-action:none;} /* (v95) BAT BUOC cho cam ung: khong co dong nay trinh duyet dien thoai chiem cu chi 2 ngon (pointercancel) — chum phong goc rong chet han, keo xoay cung dut quang */
+  #scene3d canvas{touch-action:none; display:block;}
   #scene3d canvas{display:block;}
   /* vignette điện ảnh: tối nhẹ bốn góc khung hình, không chặn thao tác */
   #vignette{position:fixed; inset:0; pointer-events:none; z-index:15;
@@ -269,25 +270,26 @@
      nút không tràn khỏi màn hình (thay cho breakpoint theo chiều cao của
      thời thanh dọc v10) */
   @media (max-width:760px){
-    .dock-btn{width:46px; padding:4px 2px 3px; border-radius:14px;}
-    #dock .dock-btn{width:46px;}
-    .dock-btn svg{width:19px; height:19px;}
-    .dock-lab{font-size:7.5px;}
+    .dock-btn{width:50px; padding:5px 2px 4px; border-radius:15px;}
+    #dock .dock-btn{width:50px;}
+    .dock-btn svg{width:22px; height:22px;}
+    .dock-lab{font-size:8.5px;}
+    #playTimePill{top:60px;} /* (v95) ha o dem gio xuong hang hai tren dien thoai: o giua tren (absolute) chong len o so nguoi o cum phai tren man hep — "nut dem o tren bi lech" */
   }
   @media (max-width:560px){
     /* điện thoại dọc: cụm ngữ cảnh hạ sát thanh điều khiển mới;
        nhãn của CỤM NGỮ CẢNH ẩn cho gọn, nhãn trên THANH giữ nguyên */
     #ctxDock{bottom:82px;}
-    #dock .dock-btn{width:41px;}
+    #dock .dock-btn{width:47px;}
     #dock .dock-lab{display:block;}
-    .dock-btn{width:41px; padding:5px 2px;}
-    #ctxDock .dock-lab{display:none;}
+    .dock-btn{width:47px; padding:5px 2px;}
   }
   @media (max-width:430px){
-    #dock{bottom:8px; padding:5px 6px;}
-    #dock .dock-btn{width:35px;}
-    .dock-btn{width:35px; padding:4px 1px; border-radius:12px;}
-    .dock-btn svg{width:18px; height:18px;}
+    #dock{bottom:8px; padding:6px 8px;}
+    #dock .dock-btn{width:44px;}
+    .dock-btn{width:44px; padding:5px 1px 4px; border-radius:13px;}
+    .dock-btn svg{width:21px; height:21px;}
+    .dock-lab{font-size:8px;}
   }
   /* PANEL PHÁT NHẠC THÁNH CA (thẻ nâu sẫm–vàng): mọi điều khiển nằm trong panel
      mở từ nút Thánh ca trên dock — KHÔNG còn thanh phát nhạc nổi trên màn hình chính */
@@ -302,7 +304,7 @@
   #panel.music-pop .panel-close{color:#ffe9a8; border-color:rgba(231,207,154,.45); background:rgba(231,207,154,.10); position:absolute; top:10px; right:12px; z-index:3;}
   .mu-nowtitle{font-size:16.5px; font-weight:700; color:#ffeec2; line-height:1.35;}
   .mu-src{font-size:12.5px; color:#a6967a; margin-top:2px;}
-  .mu-prog{height:8px; border-radius:6px; background:rgba(255,250,235,.12); margin-top:14px; cursor:pointer; position:relative;}
+  .mu-prog{height:8px; border-radius:6px; background:rgba(255,250,235,.12); margin-top:14px; cursor:pointer; position:relative; touch-action:none;}
   .mu-prog::after{content:""; position:absolute; left:0; right:0; top:-8px; bottom:-8px;} /* (v41) vùng bấm cao 24px — bấm một lần trúng ngay */
   .mu-prog-fill{height:100%; width:0%; border-radius:6px; background:linear-gradient(90deg,#b98a2f,#f2c53d);}
   .mu-times{display:flex; justify-content:space-between; font-size:11.5px; color:#a6967a; margin-top:5px;}
@@ -364,7 +366,7 @@
      máy tính dùng thêm WASD / phím mũi tên. */
 
   /* ---------- Panel ---------- */
-  #panelWrap{position:fixed; inset:0; background:rgba(12,9,6,.55); z-index:70; display:flex; align-items:flex-end; justify-content:center; opacity:1; transition:opacity .18s ease;}
+  #panelWrap{position:fixed; inset:0; height:100vh; height:100dvh; /* (v95) dvh: day panel dung o mep tren thanh cong cu trinh duyet dien thoai — ban cu inset:0 tinh ca vung sau thanh cong cu, nut cuoi bi che va khong an duoc */ background:rgba(12,9,6,.55); z-index:70; display:flex; align-items:flex-end; justify-content:center; opacity:1; transition:opacity .18s ease;}
   #panelWrap.hidden{display:flex !important; opacity:0; visibility:hidden; pointer-events:none;}
   /* (v39) POP-UP THIẾT KẾ LẠI — áp cho MỌI panel dùng chung #panel
      (tương tác, chat, kinh nguyện, tiền lễ, danh sách người...) để
@@ -567,9 +569,10 @@
     #ctxDock{bottom:150px;}
   }
   @media (max-width:430px){
-    #dock{transform:translateX(-50%) scale(.64); transform-origin:50% 100%;}
-    #ctxDock{bottom:118px;}
+    #dock{transform:translateX(-50%) scale(.95); transform-origin:50% 100%;} /* (v95) bo muc thu .64 lam bang dieu khien nho xiu tren iPhone (nut 50px chi con 32px) — nay giu .95, nut hien ~42px */
+    #ctxDock{bottom:98px;}
   }
+  @media (max-width:360px){ #dock{transform:translateX(-50%) scale(.84); transform-origin:50% 100%;} } /* (v95) man rat hep moi thu them de khong tran */
   #panel{background:var(--ivory); color:var(--ink2); border:1px solid var(--ivory-brd); border-bottom:none; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); box-shadow:0 -12px 44px rgba(90,64,20,.3);}
   #panel h3{color:var(--ink-title);}
   #panel .sub{color:var(--ink-sub);}
@@ -866,7 +869,8 @@ const bootT0 = performance.now();
 /* NHÃN PHIÊN BẢN — hằng số DUY NHẤT của bản giao hàng: tăng số này ở mỗi đợt
    giao (v8, v9, ...) và ghi cùng số vào đầu README. Hiện nhỏ ở màn hình tải
    để người dùng nhìn là biết mình đang chạy bản nào, tránh lẫn bản cũ do cache. */
-const APP_VERSION = "v93";
+const APP_VERSION = "v95";
+const QUALITY = (() => { const mob = matchMedia("(pointer: coarse)").matches && Math.min(screen.width, screen.height) <= 1100; return { mobile: mob, pixelCap: mob ? 1.5 : 2, shadow: mob ? 1024 : 2048 }; })(); // (v95) phat hien dien thoai/tablet nho de chay che do nhe (xem cac diem dung QUALITY ben duoi)
 const VERSION_LABEL = "Phiên bản 12/11 · " + APP_VERSION;
 { const lv = document.getElementById("loadVersion"); if (lv) lv.textContent = VERSION_LABEL; }
 /* (v23) LỜI CHÚA THEO NGÀY cho màn hình chờ: danh sách câu Kinh Thánh
@@ -2309,7 +2313,7 @@ function buildWorld(){
   // (v35) bóng đổ THẬT từ đèn chính: vùng bóng giới hạn quanh lòng nhà thờ
   // + sân trước để giữ hiệu năng (bản đồ bóng 2048, PCFSoft ở renderer)
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(QUALITY.shadow, QUALITY.shadow); // (v95) dien thoai 1024, may tinh 2048
   sun.shadow.camera.left = -30; sun.shadow.camera.right = 30;
   sun.shadow.camera.top = 30; sun.shadow.camera.bottom = -28;
   sun.shadow.camera.near = 1; sun.shadow.camera.far = 90;
@@ -4130,8 +4134,10 @@ const CANDLE_POINTS = [
   // tượng + bệ + giá nến + giỏ nến của góc đều đã xóa; nến cũ mang
   // st "pieta" được server ép về "altar-left" (cleanCandleSt), phía
   // client candlePointById cũng dự phòng về điểm phải bàn thờ.
-  { id: "mary",        name: "Giá nến cạnh vòm tượng thánh",  x: -16.6, z: -11.4, r: 2.4 },
-  { id: "altar",       name: "Giá nến cạnh vòm tượng thánh (đông)", x: 16.5, z: -11.2, r: 2.6 },
+  { id: "mary",        name: "Giá nến giữa hai vòm thánh (tây 1)",  x: -16.5, z: -9.0, r: 2.6 },
+  { id: "mary2",       name: "Giá nến giữa hai vòm thánh (tây 2)",  x: -16.5, z: 0.0, r: 2.6 },
+  { id: "altar",       name: "Giá nến giữa hai vòm thánh (đông 1)", x: 16.5, z: -9.0, r: 2.6 },
+  { id: "altar2",      name: "Giá nến giữa hai vòm thánh (đông 2)", x: 16.5, z: 0.0, r: 2.6 },
   // (v35) hai điểm nến MỚI: trên GÁC ĐÀN (area "loft", tọa độ là tọa độ
   // nave nhưng chỉ dùng được khi đang đứng trên gác) và trong TẦNG HẦM
   // (area "crypt", tọa độ CỤC BỘ của hầm). Các điểm cũ mặc định area "nave".
@@ -4139,8 +4145,8 @@ const CANDLE_POINTS = [
   { id: "crypt",       name: "Góc cầu nguyện tầng hầm", x: 0, z: -0.8,  r: 3.2, area: "crypt" }, // (v87) DỜI vào GIỮA LỐI ĐI trên thảm đỏ theo yêu cầu của Trí (bồn cát 24 cốc + bàn viết lời nguyện đặt giữa hầm; bản v51 ở góc đông-nam đã xóa)
 ];
 const CANDLE_DISPLAY_MAX = 24;
-const candlePointSlots = { mary: [], altar: [], crypt: [] }; // (v79) bỏ loft // (v67) gộp altar-left/right -> altar
-const candlePointUsed = { mary: 0, altar: 0, crypt: 0 }; // (v79) bỏ loft
+const candlePointSlots = { mary: [], mary2: [], altar: [], altar2: [], crypt: [] }; // (v79) bỏ loft // (v67) gộp altar-left/right -> altar
+const candlePointUsed = { mary: 0, mary2: 0, altar: 0, altar2: 0, crypt: 0 }; // (v79) bỏ loft
 const candleRackGroups = []; // các group giá nến trong cảnh (raycast khi chạm)
 function candlePointById(id){ return CANDLE_POINTS.find(p => p.id === id) || CANDLE_POINTS.find(p => p.id === "altar"); } // (v40) id lạ (vd "pieta" cũ) -> điểm nến còn lại gần góc đó nhất
 function nearestCandlePoint(x, z){
@@ -4441,56 +4447,37 @@ function buildCandlePoints(){
   // chặng/sàn. Điểm nến "pieta" cũng đã rời CANDLE_POINTS + server.
   // (3) ĐỨC MẸ — giá 2 tầng x 12 = 24 ô ở sườn TÂY của tượng, mặt hướng ra
   // phía trước (về phía giáo dân).
-  const mg = new THREE.Group(); // (v88) BAN THAP NEN thay gia tang GLB (507)
-  mg.add(buildCandleTable(1.9, 0.85, 0.92));
-  addBigCandle(mg, 0.92); // (v90) cay nen lon dang chay o giua ban
-  for (const lz of [0.18, -0.18]) for (let k = 0; k < 12; k++){
-    const lx = -0.775 + (1.55 / 11) * k;
-    cyl(0.045, 0.055, 0.035, MAT.brass, lx, 0.9375, lz, mg, 10);
-    candlePointSlots.mary.push({ x: -17.1 + lz, y: 0.955, z: -11.4 - lx }); // (v92) ban nen da dời toi canh o vом z -13,5: o nen tinh theo phep xoay
-  }
-  const mBasket = addCandlePile(mg, 0, 0.92, 0.31); // (v90) XOA GIO NEN DUOI DAT — nen chua thap nam tren khay o mep truoc mat ban
-  mg.rotation.y = Math.PI / 2; // (v90) dai ban chay doc tuong tay, mat truoc huong ra loi di
-  mg.position.set(-17.1, 0, -11.4); // (v92) DOI VAO SAT TUONG CANH O VOM TUONG THANH z -13,5 theo yeu cau cua Tri (anh 537/538) — cho cu z -24,5 canh cua hong dung lung giua san
-  mg.userData.pointId = "mary";
-  scene.add(mg);
-  candleRackGroups.push(mg);
-  mg.updateMatrixWorld(true);
-  { const bv = new THREE.Vector3(); mBasket.getWorldPosition(bv); candleBasketWorld.mary = { x: bv.x, z: bv.z }; candleBasketLocal.mary = { x: bv.x, z: bv.z }; }
-  addGlow(0, 1.3, 0, 0.9, 0.14, mg);
-  addCollider(-7.9, -6.2, -23.95, -23.2, 1.8);
-  addCollider(-17.73, -16.47, -12.72, -10.08, 1.5); // (v92) collider than ban nen mary o vi tri canh o vом moi
-  // (4)+(5) BÀN THỜ — khay nến THẤP-RỘNG ngay trước mỗi giá nến đứng bên bậc
-  // thềm: 3 hàng x 8 = 24 ô trên mặt khay (v12: khung đồng bộ phong cách sắt
-  // mỹ thuật của các giá kia — vòm tay vịn cong hai đầu, gờ khay viền đồng,
-  // giỏ nến tích hợp phía trong; vị trí + lưới ô GIỮ NGUYÊN).
-  // (v67) hai khay cũ hai bên bậc thềm ĐÃ GỘP thành một khay ở lối đi đông (khối dưới)
-  for (const sx of [1]){
-    const id = "altar";
-    const cx = 17.0, cz = -11.2; // (v93) DOI XUNG PHIA TAY theo yeu cau cua Tri (anh 540): ban nen ap sat tuong dong CANH o vom Vinh Son (khong con dung truoc o vom), lung ban cham tuong nhu ban mary phia tay // (v91) duoi O VOM THANH VINH SON (z -13,5, anh 525) — keo ra khoi DE O VOM (de nho toi x 16,875, cao 1,08) cho lung ban cham sat mat de // (v67) khay nến áp tường đông mới, tránh cửa hông
-    // (v36) khay nến là MODEL GLB (dựng cho phía phải; phía trái lật
-    // gương scale.x = -1 — renderer tự lật mặt theo định thức âm, giỏ
-    // nến tự về đúng phía trong như bản thủ tục). Thiếu model -> thủ tục.
-    const g = new THREE.Group(); // (v88) BAN THAP NEN thay gia votive lon (507)
+  // (v94) BON BAN NEN AP TUONG NAM GIUA CAC O VOM THANH (anh
+  // 545/546 cua Tri): moi tuong hong co HAI ban o hai khoang
+  // tuong giua ba o vom (z -9,0 giua vom 1-2, z 0,0 giua vom
+  // 2-3), hai phia DOI XUNG — thay hai ban cu canh vom dau
+  function buildWallCandleTable(id, sx, gz){
+    const cx = sx * 17.0;
+    const g = new THREE.Group();
     g.add(buildCandleTable(2.5, 1.15, 0.92));
-    addBigCandle(g, 0.92); // (v90) cay nen lon dang chay o giua ban
-    const aBasket = addCandlePile(g, 0, 0.92, 0.44); // (v90) XOA GIO NEN DUOI DAT — khay nen tren mep truoc mat ban
-    g.position.set(cx, 0, cz);
-    g.rotation.y = -Math.PI / 2; // dai ban doc theo tuong dong, mat truoc huong ra loi di (-x)
+    addBigCandle(g, 0.92);
+    const basket = addCandlePile(g, 0, 0.92, 0.44);
+    g.position.set(cx, 0, gz);
+    g.rotation.y = sx > 0 ? -Math.PI / 2 : Math.PI / 2;
     g.userData.pointId = id;
     scene.add(g);
     candleRackGroups.push(g);
     g.updateMatrixWorld(true);
-    { const bv = new THREE.Vector3(); aBasket.getWorldPosition(bv); candleBasketWorld[id] = { x: bv.x, z: bv.z }; candleBasketLocal[id] = { x: bv.x, z: bv.z }; }
+    { const bv = new THREE.Vector3(); basket.getWorldPosition(bv); candleBasketWorld[id] = { x: bv.x, z: bv.z }; candleBasketLocal[id] = { x: bv.x, z: bv.z }; }
     for (const lz of [0.32, 0, -0.32]) for (let k = 0; k < 8; k++){
       const lx = -0.875 + k * 0.25;
       cyl(0.045, 0.055, 0.035, MAT.brass, lx, 0.9375, lz, g, 10);
-      candlePointSlots[id].push({ x: cx - lz, y: 0.955, z: cz + lx });
+      candlePointSlots[id].push(sx > 0 ? { x: cx - lz, y: 0.955, z: gz + lx } : { x: cx + lz, y: 0.955, z: gz - lx });
     }
-    addGlow(cx - 0.3, 1.3, cz, 0.9, 0.24);
-    addFloorGlow(cx - 0.35, cz, 1.5);
-    addCollider(cx - 0.63, cx + 0.63, cz - 1.32, cz + 1.32, 1.6); // (v88) collider than ban nen altar
+    addGlow(cx - sx * 0.3, 1.3, gz, 0.9, 0.24);
+    addFloorGlow(cx - sx * 0.35, gz, 1.5);
+    addCollider(cx - 0.63, cx + 0.63, gz - 1.32, gz + 1.32, 1.6);
   }
+  buildWallCandleTable("mary", -1, -9.0);
+  buildWallCandleTable("mary2", -1, 0.0);
+  buildWallCandleTable("altar", 1, -9.0);
+  buildWallCandleTable("altar2", 1, 0.0);
+  addCollider(-7.9, -6.2, -23.95, -23.2, 1.8);
 }
 
 /* (v36) bản thủ tục dự phòng của khay nến bàn thờ (khi altar-tray.glb lỗi tải) */
@@ -5444,10 +5431,31 @@ function buildLoft(){
   // (v91) 5 hop collider tret cua thang DA GO (anh 529): cac goc hop lo khoi mat tuong vanh toi ~1m thanh TUONG VO HINH tren san trong quanh chan thang — khoi thang nay do luat vanh stairMass() trong canStandNave + luoi A* dam nhiem
   // (v67) ĐÃ XÓA thảm đỏ giữa gác theo yêu cầu của Trí (cùng ghế gác + đàn organ)
   // (v41) lan can mặt trước LIỀN SUỐT bề ngang (không còn khe ô thang cũ)
-  box(24.3, 0.12, 0.34, MAT.stoneLight, 0, LOFT_Y + 1.0, 6.05); // (v93) LAN CAN MAT TRUOC NOI LIEN SUOT x -12,15..12,15 (khoi phuc — gieng thang thang o sau, khong cat mep truoc nua) // (v91) LAN CAN MAT TRUOC CAT DOAN DAU THANG (x 7,9..12,15): truoc chay lien xuyen qua loi ra cua thang lam dau thang sat/dam vao lan can — nay dung tai x 7,9 // (v85) LAN CAN DA DAY HON theo yeu cau cua Tri (anh 459): nap rong 0,24 -> 0,34, day 0,09 -> 0,12
-  box(24.3, 0.07, 0.26, MAT.stone, 0, LOFT_Y + 0.52, 6.05); // (v91) cat cung doan dau thang // (v85) thanh giua day hon (0,05x0,20 -> 0,07x0,26)
-  box(24.3, 0.12, 0.30, MAT.stoneLight, 0, LOFT_Y + 0.06, 6.05); // (v91) cat cung doan dau thang // (v85) go chan day hon (0,08x0,20 -> 0,12x0,30)
-  for (let x = -12.0; x <= 12.0; x += 0.55) // (v93) con tien chay het be ngang theo lan can noi lien cyl(0.085, 0.105, 0.84, MAT.stone, x, LOFT_Y + 0.53, 6.05); // (v91) con tien dung o x 7,75 — doan dau thang mo thoang // (v85) con tien DA TO (ban kinh 0,048/0,058 -> 0,085/0,105, nhip 0,62 -> 0,55)
+  // (v94) CON TIEN CAM THACH kieu anh 543: than lathe dang
+  // binh hoa tren be vuong nho — dung chung cho lan can mat
+  // truoc, hai hanh lang, cau thang va chieu nghi (dong bo)
+  const balPts = [];
+  [[0.0, 0.0], [0.088, 0.0], [0.088, 0.035], [0.062, 0.07], [0.054, 0.13], [0.072, 0.26], [0.1, 0.4], [0.107, 0.47], [0.09, 0.6], [0.058, 0.7], [0.054, 0.74], [0.082, 0.77], [0.082, 0.83], [0.0, 0.83]].forEach(p => balPts.push(new THREE.Vector2(p[0], p[1])));
+  const BAL_GEO = new THREE.LatheGeometry(balPts, 14);
+  const newelPts = [];
+  [[0.0, 0.0], [0.17, 0.0], [0.17, 0.05], [0.12, 0.09], [0.105, 0.16], [0.115, 0.34], [0.13, 0.5], [0.115, 0.64], [0.085, 0.74], [0.08, 0.78], [0.115, 0.83], [0.12, 0.87], [0.07, 0.91], [0.125, 0.98], [0.13, 1.03], [0.09, 1.09], [0.0, 1.11]].forEach(p => newelPts.push(new THREE.Vector2(p[0], p[1])));
+  const NEWEL_GEO = new THREE.LatheGeometry(newelPts, 16); // (v94) cot tien tron dau thang, dinh qua cau (anh 544)
+  const PLINTH_GEO = new THREE.BoxGeometry(0.17, 0.05, 0.17);
+  function addBaluster(parent, x, yBase, z, mat){
+    const pl = new THREE.Mesh(PLINTH_GEO, mat || MAT.altarStone); pl.position.set(x, yBase + 0.025, z); parent.add(pl);
+    const b = new THREE.Mesh(BAL_GEO, mat || MAT.altarStone); b.position.set(x, yBase + 0.05, z); b.castShadow = true; parent.add(b);
+  }
+  box(24.3, 0.12, 0.34, MAT.altarStone, 0, LOFT_Y + 1.06, 6.05); // (v94) TAY VIN CAM THACH phang rong (anh 543) — lan can mat truoc noi lien suot x -12,15..12,15
+  box(24.3, 0.12, 0.30, MAT.altarStone, 0, LOFT_Y + 0.06, 6.05); // (v94) GO CHAN cam thach (bo thanh giua — con tien cao het khoang nhu anh 543)
+  for (let x = -12.05; x <= 12.05; x += 0.34) addBaluster(scene, x, LOFT_Y + 0.12, 6.05); // (v94) con tien cam thach tren be vuong, nhip 0,34
+  // (v94) LAN CAN MIENG GIENG THANG phia tay (x 13,3): mieng gieng
+  // mo thang ra dai san truoc gac — khong co lan can thi nguoi di
+  // bo tren gac di theo truc thang (z 9,7) se dung chet o mep
+  // gieng cach chieu nghi 3,7m ma khong thay ly do; nay co lan
+  // can cam thach dong bo, loi vao thang o hai dai san hai ben
+  box(0.34, 0.12, 2.5, MAT.altarStone, 13.3, LOFT_Y + 1.06, 9.7);
+  box(0.30, 0.12, 2.5, MAT.altarStone, 13.3, LOFT_Y + 0.06, 9.7);
+  for (let wz = 8.62; wz <= 10.85; wz += 0.34) addBaluster(scene, 13.3, LOFT_Y + 0.12, wz);
   // (v91) TRU DA + CAU VANG o dau TAY khe lan can (7,95; 6,05) DA XOA theo anh 530 khoanh do cua Tri — loi ra dau thang giu thoang
   { // (v91) COT DEN LONG dau DONG khe lan can (12,15; 6,05) — can doi voi lan can mat truoc san co (anh 530)
     const hg = new THREE.Group(); hg.position.set(12.15, LOFT_Y, 6.05); scene.add(hg);
@@ -5492,10 +5500,9 @@ function buildLoft(){
     const uSkin = new THREE.Mesh(new THREE.PlaneGeometry(5.95, 41.85), MAT.loftUnder); uSkin.rotation.x = Math.PI / 2; uSkin.position.set(gx, LOFT_Y - 0.325, -15.025); scene.add(uSkin); // (v87) da duoi HANH LANG gac cung vat lieu phang, cung cao do voi da duoi san nam (z -35,95..5,9, khong chong len da duoi san nam) — tu san nhin len tran duoi tang 2 tron deu mot tong
       // (v83) ĐÃ XÓA dải gỗ mép nối hành lang (cùng đợt ảnh 405)
     // (v67) LAN CAN ĐÁ dọc mép trong (x ±12,15) theo yêu cầu của Trí: bỏ lan can gỗ — tay nắm ĐÁ + con tiện đá + gờ chân đá
-    box(0.36, 0.12, 41.9, MAT.stoneLight, sx * 12.15, LOFT_Y + 1.0, -14.95); // (v85) tay vin DA DAY nhu mat truoc gac (rong 0,26 -> 0,36)
-    box(0.26, 0.07, 41.9, MAT.stone, sx * 12.15, LOFT_Y + 0.52, -14.95); // (v85) THEM thanh giua da cho hanh lang (truoc chi co o mat truoc)
-    box(0.32, 0.12, 41.9, MAT.stoneLight, sx * 12.15, LOFT_Y + 0.06, -14.95); // (v85) go chan day hon (0,08 -> 0,12, rong 0,20 -> 0,32)
-    for (let pz = -35.3; pz <= 5.7; pz += 0.55) cyl(0.085, 0.105, 0.84, MAT.stone, sx * 12.15, LOFT_Y + 0.53, pz); // (v85) con tien DA TO nhu mat truoc
+    box(0.34, 0.12, 41.9, MAT.altarStone, sx * 12.15, LOFT_Y + 1.06, -14.95); // (v94) TAY VIN CAM THACH (anh 543)
+    box(0.30, 0.12, 41.9, MAT.altarStone, sx * 12.15, LOFT_Y + 0.06, -14.95); // (v94) GO CHAN cam thach (bo thanh giua)
+    for (let pz = -35.75; pz <= 5.9; pz += 0.34) addBaluster(scene, sx * 12.15, LOFT_Y + 0.12, pz); // (v94) con tien cam thach nhip 0,34
     // (v72) ĐÃ GỠ lan can ngang đầu bắc (z −21): hành lang nay chạy THẲNG TỚI VÁCH SAU (z −35,9) nên đầu hành lang là tường, không cần lan can chéo nữa
     // (v68) ĐÃ XÓA hàng CON SƠN ĐÁ đỡ sàn hành lang theo yêu cầu của Trí (ảnh 301/302): thanh 3,6m xoay chéo 0,5 rad đâm XUYÊN QUA phiến sàn — đầu trên nhô lên mặt lối đi, đầu dưới thò xuống lòng nhà thờ thành "thanh nhô". Sàn hành lang nay không còn thanh đỡ lộ ra.
     // (v67) GHẾ HÀNH LANG ĐỔI THÀNH GHẾ DÀI KIỂU CHUNG như dưới nhà thờ theo yêu cầu của Trí (model pew: lưng ghế + Thánh Giá đầu ghế), lưng áp tường, mặt hướng vào lòng nhà thờ
@@ -5537,59 +5544,64 @@ function buildLoft(){
   const ST2 = { x0: 5.9, z: 9.7, w: 2.2, steps: 36, rise: LOFT_Y / 36, tread: 0.29 };
   for (let i = 0; i < ST2.steps - 1; i++){
     const topY = ST2.rise * (i + 1);
-    const dep = Math.min(topY, 2.3);
-    const sb = box(ST2.tread + 0.02, dep, ST2.w, MAT.stoneLight, ST2.x0 + (i + 0.5) * ST2.tread, topY - dep / 2, ST2.z, stairG);
+    const sb = wallBox(ST2.tread + 0.05, 0.28, ST2.w, MAT.wallStone, ST2.x0 + (i + 0.5) * ST2.tread - 0.015, topY - 0.14, ST2.z, stairG);
     sb.receiveShadow = true; sb.castShadow = true;
   }
   { // (v93) CHIEU NGHI O DINH: san phang x 16,05..17,96 ngang
     // dung mat san gac — dau thang noi truc tiep voi san va
     // loi di tang tren, nhan vat dung tren chieu nghi roi moi
     // buoc xuong bac dau tien
-    const pb2 = box(1.91, 2.55, ST2.w, MAT.stoneLight, 17.005, LOFT_Y - 2.55 / 2, ST2.z, stairG);
+    const pb2 = wallBox(1.91, 2.55, ST2.w, MAT.wallStone, 17.005, LOFT_Y - 2.55 / 2, ST2.z, stairG);
     pb2.receiveShadow = true; pb2.castShadow = true;
   }
-  { // DAY THANG: dai nghieng lien duoi dai bac
-    const runL = ST2.tread * (ST2.steps - 1), slopeL = Math.hypot(runL, LOFT_Y - ST2.rise);
-    const sf = box(slopeL + 0.1, 0.16, 1.98, MAT.stoneLight, ST2.x0 + runL / 2, (LOFT_Y - ST2.rise) / 2 - 2.3 + 0.03, ST2.z, stairG);
-    sf.rotation.z = Math.atan2(LOFT_Y - ST2.rise, runL); sf.receiveShadow = true;
+  { // (v94) THAN THANG DAC (anh 541): mot TAM DA nghieng DAY
+    // 1,15 nam duoi dai bac — mat duoi la mot duong cheo thang
+    // tu chan thang len dinh, bac nam truc tiep tren tam
+    const runL = ST2.tread * (ST2.steps - 1), riseL = LOFT_Y - ST2.rise;
+    const th = Math.atan2(riseL, runL), slopeL = Math.hypot(runL, riseL);
+    const sf = wallBox(slopeL + 1.5, 1.15, 2.06, MAT.wallStone, ST2.x0 + runL / 2 + Math.sin(th) * 0.575, riseL / 2 - 0.28 - Math.cos(th) * 0.575, ST2.z, stairG);
+    sf.rotation.z = th; sf.receiveShadow = true; sf.castShadow = true;
   }
-  // LAN CAN THANG hai ben (kieu anh 531): go thap + con tien +
-  // tay vin chay doc doc + cot chop kim tu thap o hai dau doan
+  // (v94) LAN CAN THANG (anh 543 tren cau truc anh 541):
+  // con tien CAM THACH cao het khoang tu go doc len tay vin
+  // (BO tam dac cua v93), tay vin phang rong, cot vuong nap
+  // phang o chan thang / diem noi chieu nghi / cuoi chieu nghi
   for (const side of [-1, 1]){
     const lz = ST2.z + side * (ST2.w / 2 - 0.02);
-    const nS = 18;
+    const hAt = sx => (sx - ST2.x0) / 10.15 * 8.75;
+    const nS = 15;
     for (let i = 0; i < nS; i++){
-      let xa, xb, ya, yb;
-      if (i < 15){ const t0 = i / 15, t1 = (i + 1) / 15; xa = ST2.x0 + t0 * 10.15; xb = ST2.x0 + t1 * 10.15; ya = t0 * 8.75; yb = t1 * 8.75; }
-      else { const t0 = (i - 15) / 3, t1 = (i - 14) / 3; xa = 16.05 + t0 * 1.85; xb = 16.05 + t1 * 1.85; ya = LOFT_Y; yb = LOFT_Y; } // doan PHANG tren chieu nghi — lan can lien mach dong bo
-      const va = new THREE.Vector3(xa, ya + 0.36, lz), vb = new THREE.Vector3(xb, yb + 0.36, lz);
+      const t0 = i / nS, t1 = (i + 1) / nS;
+      const xa = ST2.x0 + t0 * 10.15, xb = ST2.x0 + t1 * 10.15, ya = t0 * 8.75, yb = t1 * 8.75;
+      const va = new THREE.Vector3(xa, ya, lz), vb = new THREE.Vector3(xb, yb, lz);
       const dir = vb.clone().sub(va), len = dir.length(); dir.normalize();
       const zAx = new THREE.Vector3(0, 0, side);
       const yAx = new THREE.Vector3().crossVectors(zAx, dir).normalize();
       const zAx2 = new THREE.Vector3().crossVectors(dir, yAx).normalize();
       const mtx = new THREE.Matrix4().makeBasis(dir, yAx, zAx2);
-      const curb = new THREE.Mesh(new THREE.BoxGeometry(len + 0.05, 0.95, 0.22), MAT.stoneLight);
-      curb.quaternion.setFromRotationMatrix(mtx);
-      curb.position.copy(va).add(vb).multiplyScalar(0.5).addScaledVector(yAx, -0.535);
-      stairG.add(curb);
-      const rail = new THREE.Mesh(new THREE.BoxGeometry(len + 0.08, 0.10, 0.32), MAT.stoneLight);
+      const base = new THREE.Mesh(new THREE.BoxGeometry(len + 0.05, 0.16, 0.30), MAT.wallStone);
+      base.quaternion.setFromRotationMatrix(mtx);
+      base.position.copy(va).add(vb).multiplyScalar(0.5).addScaledVector(yAx, 0.08);
+      stairG.add(base);
+      const rail = new THREE.Mesh(new THREE.BoxGeometry(len + 0.08, 0.12, 0.34), MAT.wallStone);
       rail.quaternion.setFromRotationMatrix(mtx);
-      rail.position.copy(va).add(vb).multiplyScalar(0.5).addScaledVector(yAx, 0.62);
+      rail.position.copy(va).add(vb).multiplyScalar(0.5).addScaledVector(yAx, 1.05);
       stairG.add(rail);
-      for (let b = 1; b <= 3; b++){
-        const bp = va.clone().lerp(vb, b / 4).addScaledVector(yAx, 0.255);
-        const bal = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.065, 0.63, 8), MAT.stoneLight);
-        bal.quaternion.setFromRotationMatrix(mtx); bal.position.copy(bp); stairG.add(bal);
-      }
-      const mkPost2 = (pt, baseY) => {
-        const pg = new THREE.Group(); pg.quaternion.setFromRotationMatrix(mtx); pg.position.copy(pt).addScaledVector(yAx, 0.09); stairG.add(pg);
-        box(0.24, 1.10, 0.24, MAT.stoneLight, 0, 0, 0, pg);
-        const pyr = new THREE.Mesh(new THREE.ConeGeometry(0.21, 0.16, 4), MAT.stoneLight); pyr.position.y = 0.63; pyr.rotation.y = Math.PI / 4; pg.add(pyr);
-      };
-      if (i === 0) mkPost2(va);
-      if (i === 15) mkPost2(va); // cot o nga ba doc thang — chieu nghi
-      if (i === nS - 1) mkPost2(vb);
     }
+    for (let sx = ST2.x0 + 0.32; sx <= 15.95; sx += 0.34){
+      const b = new THREE.Mesh(BAL_GEO, MAT.wallStone);
+      b.position.set(sx, hAt(sx) + 0.16, lz); b.castShadow = true; stairG.add(b);
+    }
+    wallBox(1.95, 0.12, 0.30, MAT.wallStone, 16.975, LOFT_Y + 0.06, lz, stairG); // go chan tren chieu nghi
+    wallBox(1.95, 0.12, 0.34, MAT.wallStone, 16.975, LOFT_Y + 1.06, lz, stairG); // tay vin tren chieu nghi
+    for (let sx = 16.30; sx <= 17.85; sx += 0.34) addBaluster(stairG, sx, LOFT_Y + 0.12, lz, MAT.wallStone);
+    const mkPost3 = (px, baseY2) => {
+      wallBox(0.42, 0.10, 0.42, MAT.wallStone, px, baseY2 + 0.05, lz, stairG);
+      const np = new THREE.Mesh(NEWEL_GEO, MAT.wallStone); np.position.set(px, baseY2 + 0.10, lz); np.castShadow = true; stairG.add(np);
+    };
+    mkPost3(ST2.x0 - 0.18, 0);
+    mkPost3(16.02, LOFT_Y);
+    mkPost3(17.90, LOFT_Y);
   }
   loftTapTargets.push(stairG);
   // (v67) ĐÃ XÓA ĐÀN ORGAN trên gác theo yêu cầu của Trí (cùng 2 hàng ghế gác + thảm đỏ gác)
@@ -9671,6 +9683,7 @@ let pendingCandleSt = "altar-left";   // id điểm nến đích khi đang tự 
    giá chặn nhân vật ở khoảng 1,3..2,4m không nhích thêm được. */
 const CANDLE_TAKE_R = 1.30;
 let pendingCandleStallT = 0, pendingCandleLastX = 0, pendingCandleLastZ = 0;
+let pendingPlaceSt = null, pendingPlaceStallT = 0, pendingPlaceLastX = 0, pendingPlaceLastZ = 0; // (v95) nut Dat nen: dang tu di toi gia dich, toi noi moi dat
 // (v13) joyVec / joyTarget của joystick đã xóa cùng joystick
 
 /* Hậu kỳ phát sáng (bloom) kiểu InPeace: chỉ những thứ thật sáng mới có hào quang —
@@ -10182,7 +10195,7 @@ function buildChristmas(){
      mỗi hạt một cỡ/mờ/pha riêng), rơi chậm + đung đưa sin + gió
      nhẹ một hướng; chạm đất tái sinh trên cao, không tích đốm. */
   {
-    const N = 2300; // (v79) TUYẾT PHỦ KHẮP MAP theo yêu cầu của Trí (ảnh 358: hành lang đông cạnh nhà thờ không có tuyết): vùng rơi nay là toàn khuôn viên x ±48, z -44..68 — vẫn LOẠI TRỪ lòng nhà thờ (|x| < 19,5, z -37,5..15,5) để tuyết không bao giờ lọt vào trong
+    const N = QUALITY.mobile ? 1000 : 2300; // (v95) dien thoai giam hat tuyet cho nhe // (v79) TUYẾT PHỦ KHẮP MAP theo yêu cầu của Trí (ảnh 358: hành lang đông cạnh nhà thờ không có tuyết): vùng rơi nay là toàn khuôn viên x ±48, z -44..68 — vẫn LOẠI TRỪ lòng nhà thờ (|x| < 19,5, z -37,5..15,5) để tuyết không bao giờ lọt vào trong
     const base = new Float32Array(N * 3), scl = new Float32Array(N), pha = new Float32Array(N), spd = new Float32Array(N);
     for (let i = 0; i < N; i++){
       let px = 0, pz = 0, okk = false;
@@ -10316,9 +10329,9 @@ async function initPostFX(){
        Khởi tạo composer bằng render target có samples: 4 (WebGL2 MSAA);
        EffectComposer tự clone target này cho renderTarget2 nên cả hai đều có
        MSAA. Nếu máy không hỗ trợ WebGL2, three tự bỏ qua samples. */
-    const composerRT = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: THREE.HalfFloatType, samples: 4 });
+    const composerRT = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: THREE.HalfFloatType, samples: QUALITY.mobile ? 2 : 4 }); // (v95) dien thoai MSAA 2x la du o man nho
     composer = new EffectComposer(renderer, composerRT);
-    composer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    composer.setPixelRatio(Math.min(devicePixelRatio, QUALITY.pixelCap)); // (v95) dien thoai 1,5x thay 2x — bloom nhe hon ~44% dien tich
     composer.setSize(innerWidth, innerHeight);
     composer.addPass(new RenderPass(scene, camera));
     bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.30, 0.35, 0.88) // (v40) radius 0,5 -> 0,35: quầng bloom quanh ô cửa/kính màu gọn lại, bớt vệt lóa lan (kiểm chứng B1/B3); // (v40) hạ tiếp cho lối hông: strength 0,38 -> 0,30, threshold 0,85 -> 0,88 (image-76/77 còn chói)
@@ -10397,8 +10410,8 @@ function cloneModel(name){
 }
 
 function initThree(){
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" }) // (v95) uu tien GPU manh tren dien thoai/iPad;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, QUALITY.pixelCap)); // (v95) dien thoai 1,5x thay 2x
   renderer.setSize(innerWidth, innerHeight);
   renderer.shadowMap.enabled = true; // (v35) bóng đổ thật — chỉ đèn chính (sun) cast, vùng bóng giới hạn ở buildWorld
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -10685,10 +10698,34 @@ function planPathTo(t){
     if (wantLoft) return [...spiralWaypoints(false).filter(w => w.p > me.spiralP + 0.02), SPIRAL_TOP_PT, ...loftSeg(SPIRAL_TOP_PT.x, SPIRAL_TOP_PT.z, t.x, t.z)];
     return [...spiralWaypoints(true).filter(w => w.p < me.spiralP - 0.02), SPIRAL_FOOT_PT, ...computeWalkPath(SPIRAL_FOOT_PT.x, SPIRAL_FOOT_PT.z, t.x, t.z)];
   }
-  if (wantLoft && !me.onLoft)
-    return [...computeWalkPath(me.x, me.z, SPIRAL_FOOT_PT.x, SPIRAL_FOOT_PT.z), SPIRAL_FOOT_PT, ...spiralWaypoints(false), SPIRAL_TOP_PT, ...loftSeg(SPIRAL_TOP_PT.x, SPIRAL_TOP_PT.z, t.x, t.z)];
-  if (!wantLoft && me.onLoft)
-    return [...loftSeg(me.x, me.z, SPIRAL_TOP_PT.x, SPIRAL_TOP_PT.z), SPIRAL_TOP_PT, ...spiralWaypoints(true), SPIRAL_FOOT_PT, ...computeWalkPath(SPIRAL_FOOT_PT.x, SPIRAL_FOOT_PT.z, t.x, t.z)];
+  if (wantLoft && !me.onLoft){
+    // (v94) LOI RA KHOI THANG CO DINH: tu chieu nghi di qua moc
+    // (16,9; lane) -> (12,9; lane) roi moi theo loftSeg ve dich —
+    // khong de BFS tu tim duong quanh mieng gieng nua
+    let exit94;
+    if (loftLineClear(SPIRAL_TOP_PT.x, SPIRAL_TOP_PT.z, t.x, t.z)) exit94 = [];
+    else {
+      const laneO = t.z >= 9.7 ? 11.9 : 7.6;
+      const entO = { x: 12.9, z: laneO }, midO = { x: 16.9, z: laneO };
+      exit94 = loftLineClear(entO.x, entO.z, t.x, t.z) ? [midO, entO] : [midO, entO, ...loftSeg(entO.x, entO.z, t.x, t.z)];
+    }
+    return [...computeWalkPath(me.x, me.z, SPIRAL_FOOT_PT.x, SPIRAL_FOOT_PT.z), SPIRAL_FOOT_PT, ...spiralWaypoints(false), SPIRAL_TOP_PT, ...exit94];
+  }
+  if (!wantLoft && me.onLoft){
+    // (v94) HANH LANG XUONG THANG CO DINH (loi "xuong thang dung
+    // han truoc loi di" Tri bao nhieu lan): di doc dai san truoc
+    // gac o z 11,9 (phia bac) hoac 7,6 (phia nam) toi moc
+    // (16,9; lane) ngay canh chieu nghi roi moi buoc xuong —
+    // khong phu thuoc BFS quanh gieng thang nua
+    const laneD = me.z >= 9.7 ? 11.9 : 7.6;
+    const entD = { x: 12.9, z: laneD }, midD = { x: 16.9, z: laneD };
+    let appr94;
+    if (loftLineClear(me.x, me.z, SPIRAL_TOP_PT.x, SPIRAL_TOP_PT.z)) appr94 = [];
+    else if (loftLineClear(me.x, me.z, midD.x, midD.z)) appr94 = [midD];
+    else if (loftLineClear(me.x, me.z, entD.x, entD.z)) appr94 = [entD, midD];
+    else appr94 = [...loftSeg(me.x, me.z, entD.x, entD.z), entD, midD];
+    return [...appr94, SPIRAL_TOP_PT, ...spiralWaypoints(true), SPIRAL_FOOT_PT, ...computeWalkPath(SPIRAL_FOOT_PT.x, SPIRAL_FOOT_PT.z, t.x, t.z)];
+  }
   // (v67) chạm-để-đi QUA CỬA HÔNG: đích bên kia tường hông thì dẫn qua ô cửa hông (điểm trong -> thềm ngoài -> đích), cả hai chiều
   if (!wantLoft && !me.onLoft && me.zone === "nave" && Math.abs(t.x) > 18.6){
     const dsx = Math.sign(t.x); const dz = pickDoorZ(t.z); // (v68) dẫn qua cửa hông GẦN ĐÍCH HƠN (hai cửa −22 / −25,5)
@@ -10736,6 +10773,7 @@ function bindControls(){
   el.addEventListener("pointermove", e => {
     if (worldEntered && !introDone) return; // (v90) drone mo dau chua het: keo khong xoay camera
     if (!pDown) return;
+    if (pinchPts.size === 2) return; // (v95) dang chum hai ngon de zoom: khong xoay camera theo mot ngon le
     const dx = e.clientX - pDown.x, dy = e.clientY - pDown.y;
     if (!dragged){
       // (v48) vùng chết 7px đầu: chưa qua ngưỡng thì KHÔNG xoay (bản
@@ -10759,6 +10797,7 @@ function bindControls(){
     pDown = { x: e.clientX, y: e.clientY };
   });
   el.addEventListener("pointerup", e => {
+    if (pinchPts.size >= 2){ pDown = null; pOrigin = null; return; } // (v95) ngon vua nhac khoi cu chum zoom: khong tinh la cham-di
     // (v86) CHAM LECH NHE VAN TINH LA CHAM-DI: ban cu chi nhan cham khi keo duoi 7px — tren touchpad/chuot thuong, mot cu bam hay lech hon 7px nen bi tinh la KEO XOAY CAMERA, nhan vat khong di (Tri bao: dang ngoi/quy thi bam di khong duoc, phai an nut Dung day — nut DOM thi luc nao cung nhan). Nay: tong lech tu diem bam dau < 16px thi van coi la cham-di (camera co nhich mot chut khong sao).
     if (pDown && (!dragged || (pOrigin && Math.abs(e.clientX - pOrigin.x) + Math.abs(e.clientY - pOrigin.y) < 16))) handleTap(e.clientX, e.clientY);
     pDown = null; pOrigin = null;
@@ -11707,7 +11746,7 @@ $("#candleCancel").addEventListener("click", () => {
   endHandCandle(me);
   send({ t: "carry", on: false }); // (v12) báo cả phòng: mình đã bỏ nến khỏi tay
   takeFx = null;
-  pendingCandle = false; clickTarget = null;
+  pendingCandle = false; pendingPlaceSt = null; clickTarget = null;
   syncCandleCancelBtn();
 });
 /* (v53) NÚT ĐẶT NẾN (ngay cạnh nút Tắt nến) theo yêu cầu của Trí:
@@ -11717,23 +11756,42 @@ $("#candleCancel").addEventListener("click", () => {
    như Tắt nến). Khác mốc giữ 2,2s tự động của v11 (đặt xong vẫn cầm
    tiếp) — đây là thao tác chủ động: đặt là xong lượt cầm. Chưa đứng
    cạnh giá nào thì nhắc lại gần giá trước. */
-$("#candlePlace").addEventListener("click", () => {
+function doPlaceCandle(pt){
   if (!me) return;
   const hc = handCandles.get(me);
   if (!hc || !hc.mine) return;
-  const pt = candlePointAt(me.x, me.z) || nearestCandlePoint(me.x, me.z);
-  if (!pt || Math.hypot(me.x - pt.x, me.z - pt.z) > pt.r + 0.6){
-    showToast("Hãy lại gần một giá nến để đặt nến.", 3200);
-    return;
-  }
-  me.tAngle = Math.atan2(pt.x - me.x, pt.z - me.z); // quay mặt về phía giá bên cạnh
+  me.tAngle = Math.atan2(pt.x - me.x, pt.z - me.z); // quay mặt về phía giá
   lastMyCandle = { st: pt.id, at: Date.now() };
   send({ t: "candle", intention: "", st: pt.id }); // đặt 1 nến lên giá (ý nguyện trống như luồng tự động)
   endHandCandle(me);                                // xóa cây nến trên tay
   send({ t: "carry", on: false });                  // báo cả phòng: tay đã trống
   takeFx = null;
-  pendingCandle = false; clickTarget = null; walkPath = []; pathForTarget = null;
+  pendingCandle = false; pendingPlaceSt = null; clickTarget = null; walkPath = []; pathForTarget = null;
   syncCandleCancelBtn();
+}
+/* (v95) NÚT ĐẶT NẾN sửa theo yêu cầu của Trí: bản v53 đứng xa tới
+   3,2m vẫn đặt được (nến nhảy lên giá từ xa). Nay: đã SÁT giá
+   (<= CANDLE_TAKE_R 1,30m) thì đặt ngay; ở xa thì nhân vật TỰ ĐI
+   TỚI GIÁ rồi mới đặt (mốc tới nơi trong stepLocalPlayer, cùng
+   cơ chế chờ/stall như luồng đi lấy nến). */
+$("#candlePlace").addEventListener("click", () => {
+  if (!me) return;
+  const hc = handCandles.get(me);
+  if (!hc || !hc.mine) return;
+  const pt = candlePointAt(me.x, me.z) || nearestCandlePoint(me.x, me.z);
+  if (!pt){
+    showToast("Hãy lại gần một giá nến để đặt nến.", 3200);
+    return;
+  }
+  if ((pt.area || "nave") !== currentArea()){
+    showToast(pt.area === "crypt" ? "Giá nến này ở tầng hầm tưởng nhớ." : "Giá nến này ở trong nhà thờ.", 3600);
+    return;
+  }
+  hc.st = pt.id;
+  if (Math.hypot(me.x - pt.x, me.z - pt.z) <= CANDLE_TAKE_R){ doPlaceCandle(pt); return; }
+  standUp();
+  pendingPlaceSt = pt.id; pendingPlaceStallT = 0; pendingPlaceLastX = me.x; pendingPlaceLastZ = me.z;
+  clickTarget = { x: pt.x, z: pt.z };
 });
 function standUp(){
   if (me && (me.sit || me.kneel)){
@@ -11998,6 +12056,23 @@ function stepLocalPlayer(dt){
       else startTakeCandle(pt.id);
     }
   }
+  // (v95) đã tự đi tới giá nến đích (từ nút ĐẶT NẾN) -> đặt nến ngay
+  if (pendingPlaceSt){
+    const hcP = handCandles.get(me);
+    if (!hcP || !hcP.mine) pendingPlaceSt = null;
+    else {
+      const pt = candlePointById(pendingPlaceSt);
+      const dPt = Math.hypot(me.x - pt.x, me.z - pt.z);
+      let arrived = dPt <= CANDLE_TAKE_R;
+      if (!arrived && dPt <= pt.r){
+        pendingPlaceStallT += dt;
+        if (Math.hypot(me.x - pendingPlaceLastX, me.z - pendingPlaceLastZ) > 0.04){
+          pendingPlaceLastX = me.x; pendingPlaceLastZ = me.z; pendingPlaceStallT = 0;
+        } else if (pendingPlaceStallT > 0.7) arrived = true;
+      }
+      if (arrived){ pendingPlaceSt = null; clickTarget = null; doPlaceCandle(pt); }
+    }
+  }
   // nút dock tự đi: đã tới đủ gần ghế / bục quỳ đích thì chuyển sang đoạn trượt vào chỗ
   if (pendingSitGoal && Math.hypot(me.x - pendingSitGoal.x, me.z - pendingSitGoal.z) < 1.3){
     pendingSit = pendingSitGoal; pendingSitGoal = null; clickTarget = null;
@@ -12090,7 +12165,7 @@ function stepLocalPlayer(dt){
       let _pl88 = 0, _px88 = me.x, _pz88 = me.z;
       for (const _w88 of walkPath){ _pl88 += Math.hypot(_w88.x - _px88, _w88.z - _pz88); _px88 = _w88.x; _pz88 = _w88.z; }
       _pl88 += Math.hypot(clickTarget.x - _px88, clickTarget.z - _pz88);
-      const _need88 = _pl88 / 3.1 * 1.35 + 4;
+      const _need88 = _pl88 / 3.1 * 2.2 + 6; // (v94) noi ngan sach theo duong that: may cham/giat khung tung dot lam chuyen di keo dai hon uoc tinh cu 1,35x -> dich bi huy giua duong du dang di tot
       if (_need88 > clickTarget._budget) clickTarget._budget = _need88; // (v88) ngan sach theo CHIEU DAI DUONG THAT vua tinh: dich mat dat phai vong qua thang (hanh lang dong -> giua nave) duong that dai ~3x duong thang, ngan sach 2,2x cu het giua duong cach dich ~4m du dang di tot (trace T2 probe105)
       pathForTarget = clickTarget;
       stuckT = 0; stuckX = me.x; stuckZ = me.z;
@@ -12107,11 +12182,12 @@ function stepLocalPlayer(dt){
           clickTarget = null; pathForTarget = null; walkPath = []; pendingSit = null; pendingBenchGoal = null; // (v63) đích direct mà A* THÔ cũng không có đường (hành lang giữa các ô lưới bịt kín — vd điểm tiếp cận ghế hang đá neo [2]: khe lưới giữa đầu băng và phiến đá quanh hang hẹp hơn bước ô): HỦY lượt đi thay vì tính lại cùng một đường rỗng mỗi giây tới vô hạn — nhân vật đứng yên tại chỗ như ca kẹt verify63g-63t. Người chơi vẫn ngồi được khi tới gần băng (< 2,05m thì trượt thẳng vào neo, không cần điểm tiếp cận).
         } else {
           walkPath = clickTarget.direct ? (navLineClear(me.x, me.z, clickTarget.x, clickTarget.z) ? [] : computeWalkPath(me.x, me.z, clickTarget.x, clickTarget.z)) : planPathTo(clickTarget); // (v63) giữ luật đi thẳng cho đích direct khi tính lại đường lúc kẹt
+          clickTarget._t = 0; // (v94) vua tinh lai duong xong thi LAM MOI ngan sach: ban cu giu nguyen bo dem nen vong lap ket->tinh lai dot sach ngan sach roi huy dich
         }
       }
     }
     if (clickTarget){
-      clickTarget._t = (clickTarget._t || 0) + dt; // (v85) het ngan sach thoi gian -> huy dich (nguoi choi bam lai diem moi)
+      clickTarget._t = (clickTarget._t || 0) + Math.min(dt, 1 / 30); // (v94) ngan sach dem theo DUNG dt da kep cua buoc di (ban cu dem dt that: khung giat 0,05s dot ngan sach nhanh gap doi toc do di -> huy dich giua duong, nhan vat dung han)
       if (clickTarget._budget && clickTarget._t > clickTarget._budget){ clickTarget = null; pathForTarget = null; walkPath = []; pendingSit = null; pendingKneel = null; pendingBenchGoal = null; }
     }
     if (clickTarget){
@@ -13472,8 +13548,10 @@ async function loadUserMusic(){
     const files = await r.json();
     if (Array.isArray(files)){
       // playlist = CHỈ các file người dùng tự thêm (không còn nhạc tích hợp)
+      const prevSrc = (playlist[trackIdx] && playlist[trackIdx].src) || null; // (v95) nho bai dang phat truoc khi thay danh sach
       playlist = files.map(f => ({ kind: "file", title: f.title, file: f.file, sub: f.album ? ("Album: " + f.album) : "Nhạc của bạn", src: "/music/" + f.file.split("/").map(encodeURIComponent).join("/") })); // (v87) nhac theo ALBUM: dong phu hien ten album, duong dan ma hoa tung doan (album/bai.mp3)
-      trackIdx = 0;
+      const ni = prevSrc ? playlist.findIndex(t => t.src === prevSrc) : -1;
+      trackIdx = ni >= 0 ? ni : 0; // (v95) giu bai dang phat khi nap lai danh sach — ban cu reset ve 0, bai dang nghe bi tinh lai tu dau o lan chuyen bai ke tiep
       updateMusicUI();
     }
   } catch {}
@@ -13588,18 +13666,29 @@ function renderMusicPanel(){
     renderMusicDynamic();
   };
   $("#muVol").addEventListener("input", e => setVolume(e.target.value / 100));
-  $("#muProg").onclick = e => {
-    // (v41) tua theo vị trí bấm: nhảy ĐÚNG điểm ngay lần bấm đầu;
-    // nếu metadata chưa kịp tải (duration chưa có) thì NHỚ tỉ lệ và
-    // áp dụng ngay khi loadedmetadata tới — không nuốt lần bấm nữa.
+  // (v95) tua bang pointerdown + keo tha: dien thoai cham la tua
+  // ngay (click phai doi nha tay), keo duoc doc thanh; kem
+  // touch-action:none o CSS. Logic tua giu nguyen cua v41.
+  const muProgEl = $("#muProg");
+  const seekFromEvent = e => {
     const tr = playlist[trackIdx];
     if (!tr) return;
-    const r = e.currentTarget.getBoundingClientRect();
+    const r = muProgEl.getBoundingClientRect();
     const f = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
     if (isFinite(audioEl.duration) && audioEl.duration) audioEl.currentTime = f * audioEl.duration;
     else pendingSeekFrac = f;
     tickMusicPanel();
   };
+  muProgEl.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    try { muProgEl.setPointerCapture(e.pointerId); } catch {}
+    seekFromEvent(e);
+    const mv = ev2 => seekFromEvent(ev2);
+    const up = () => { muProgEl.removeEventListener("pointermove", mv); muProgEl.removeEventListener("pointerup", up); muProgEl.removeEventListener("pointercancel", up); };
+    muProgEl.addEventListener("pointermove", mv);
+    muProgEl.addEventListener("pointerup", up);
+    muProgEl.addEventListener("pointercancel", up);
+  });
   document.querySelectorAll(".mu-row").forEach(b => b.addEventListener("click", () => {
     if (!soundOn) setSound(true);
     playTrack(+b.dataset.i);
@@ -13688,6 +13777,7 @@ async function loadModelsThenWorld(){
   try {
     buildWorld();
     buildChristmas(); // (v41) dựng sẵn đồ Giáng Sinh (ẩn, chỉ hiện khi client bật)
+    if (QUALITY.mobile) scene.traverse(o => { if (o.isMesh && o.geometry && o.geometry.type === "LatheGeometry") o.castShadow = false; }); // (v95) dien thoai: tat bong do cua ~400 con tien + cot tien (mesh Lathe) — bong cua chung rat nho, tat di tiet kiem dang ke ma hinh gan nhu khong thay doi
     // (v51) ĐÃ GỠ hai collider chắn khoảng đất hai hông nhà thờ: vùng
     // này nay là vành khuôn viên đi bộ được (apron −1,8) sau khi bỏ
     // hàng rào. Tường hông nhà thờ đã có collider riêng (x ±(10,6..
@@ -13849,7 +13939,7 @@ function mainLoop(){
     // (v62) rà lại hiển thị theo zone khi vị trí qua các mốc ranh
     // (vòng gần cửa / sân trước) — refreshZoneVisibility vốn chỉ
     // chạy lúc đổi zone nên đi bộ trong cùng zone không cập nhật.
-    const _vk = me ? me.zone + "|" + (Math.abs(me.z - 14) < 8 && Math.abs(me.x) < 14 ? 1 : 0) + "|" + (me.zone === "yard" && me.z < 46 && Math.abs(me.x) < 34 ? 1 : 0) : "";
+    const _vk = me ? me.zone + "|" + (Math.abs(me.z - 14) < 8 && Math.abs(me.x) < 14 ? 1 : 0) + "|" + (SIDE_DOOR_ZS.some(dz => Math.abs(me.z - dz) < 8) && Math.abs(Math.abs(me.x) - 18.2) < 9 ? 1 : 0) + "|" + (me.zone === "yard" && me.z < 46 && Math.abs(me.x) < 34 ? 1 : 0) : ""; // (v95) them moc CUA HONG — truoc day _vk thieu nen san khong hien truoc o cua hong, phai di han ra ngoai moi thay
     if (_vk !== _zoneVisKey){ _zoneVisKey = _vk; refreshZoneVisibility(); }
   }
   if (composer) composer.render();
