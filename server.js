@@ -145,7 +145,7 @@ const players = new Map(); // id -> player
    có -> ép về "altar-left". Nến cũ trong file lưu (chưa có st, hoặc mang st
    "main" của điểm giữa nhà thờ đã gỡ ở v17) cũng được gán "altar-left" lúc
    nạp qua cùng hàm này. */
-const CANDLE_POINT_IDS = ["mary", "altar", "crypt"]; // (v79) bỏ điểm nến tầng trên "loft" theo yêu cầu của Trí — nến cũ st "loft" tự ép về "altar" qua cleanCandleSt // (v67) gộp hai điểm bàn thờ thành "altar" // (v40) ĐÃ GỠ điểm "pieta" — nến cũ mang st "pieta" tự ép về "altar-left" qua cleanCandleSt
+const CANDLE_POINT_IDS = ["mary", "mary2", "altar", "altar2", "crypt"]; // (v94) them hai diem nen giua vom moi (moi tuong hong 2 ban) // (v79) bỏ điểm nến tầng trên "loft" theo yêu cầu của Trí — nến cũ st "loft" tự ép về "altar" qua cleanCandleSt // (v67) gộp hai điểm bàn thờ thành "altar" // (v40) ĐÃ GỠ điểm "pieta" — nến cũ mang st "pieta" tự ép về "altar-left" qua cleanCandleSt
 function cleanCandleSt(st) { return CANDLE_POINT_IDS.includes(st) ? st : "altar"; } // (v67) nến cũ altar-left/right/pieta ép về điểm gộp "altar"
 /* (v35) KHU VỰC (zone) của người chơi: "yard" sân ngoài / "nave" lòng nhà
    thờ (gác đàn vẫn thuộc nave — cao độ phân biệt bằng field y) / "crypt"
@@ -884,10 +884,21 @@ const httpServer = http.createServer((req, res) => {
   if (p === "/") p = "/index.html";
   const file = path.join(PUBLIC_DIR, p);
   if (!file.startsWith(PUBLIC_DIR)) { res.writeHead(403); return res.end("Forbidden"); }
-  fs.readFile(file, (err, data) => {
-    if (err) { res.writeHead(404); return res.end("Not found"); }
-    res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream", ...NO_STORE });
-    res.end(data);
+  fs.stat(file, (err, st) => {
+    if (err || !st.isFile()) { res.writeHead(404); return res.end("Not found"); }
+    const type = MIME[path.extname(file)] || "application/octet-stream";
+    const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || "");
+    if (m) {
+      let start = m[1] === "" ? null : parseInt(m[1], 10);
+      let end = m[2] === "" ? null : parseInt(m[2], 10);
+      if (start === null) { start = Math.max(0, st.size - (end || 0)); end = st.size - 1; }
+      else if (end === null || end >= st.size) end = st.size - 1;
+      if (start > end || start >= st.size) { res.writeHead(416, { "Content-Range": "bytes */" + st.size }); return res.end(); }
+      res.writeHead(206, { "Content-Type": type, "Content-Range": "bytes " + start + "-" + end + "/" + st.size, "Accept-Ranges": "bytes", "Content-Length": end - start + 1, ...NO_STORE });
+      return fs.createReadStream(file, { start, end }).pipe(res);
+    }
+    res.writeHead(200, { "Content-Type": type, "Accept-Ranges": "bytes", "Content-Length": st.size, ...NO_STORE });
+    fs.createReadStream(file).pipe(res);
   });
 });
 
