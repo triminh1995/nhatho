@@ -20,9 +20,27 @@
   #loading.done{opacity:0; pointer-events:none;}
   .load-inner{max-width:680px; width:100%; margin:auto;} /* (v94) khoi noi dung man hinh cho (Thanh Gia + hai nut + Nhin de vao + cau Loi Chua) nam GIUA MAN HINH theo chieu doc theo yeu cau cua Tri (anh 547); man hinh thap qua thi margin auto ve 0 va cuon tu dau nhu cu */
   .cross-mark{position:relative; width:fit-content; margin:6px auto 12px; line-height:0;} /* (v97) Thanh Gia SVG dang THANG nhu Thanh Gia tren cua chinh (Tri: doi giong cua + cho to len, dien thoai nhin nho qua), sang dan tu duoi len theo tien trinh tai */
-  .cross-mark svg{display:block; height:clamp(165px, 25vh, 208px); width:auto;} /* (v97) to len ~1,6 lan so voi 118px cu */
+  .cross-mark svg{display:block; height:clamp(215px, 33vh, 272px); width:auto;} /* (v99) TO THEM nua theo yeu cau cua Tri (18/11 22:19) */ /* (v97) to len ~1,6 lan so voi 118px cu */
   .cross-mark .cm-base{display:block;}
   .cross-mark .cm-fill{position:absolute; left:0; right:0; top:0; clip-path:inset(100% 0 0 0);} /* (v96) BO drop-shadow vang quanh Thanh Gia theo yeu cau cua Tri: anh sang chi chay BEN TRONG cay Thanh Gia, ben ngoai khong con nen vang */
+  /* (v99) HIEU UNG THANH GIA MAN HINH CHO theo yeu cau cua Tri (18/11 22:32): quang sang vang MEM tho nhe sau Thanh Gia (khong phai vien tron cung nhu ban v96 da bo), Thanh Gia troi len xuong rat cham, mot luot SANG LUOT qua mat vang moi ~5s, 6 hat sang vang lap lanh bay len quanh Thanh Gia, va khi tai XONG mot vong sang lan toa mot lan. */
+  .cross-mark{z-index:0; animation:cmFloat 6s ease-in-out infinite;}
+  .cross-mark::before{content:""; position:absolute; inset:-32% -55%; z-index:-1; background:radial-gradient(50% 50% at 50% 50%, rgba(255,205,92,.34) 0%, rgba(255,205,92,.12) 45%, rgba(255,205,92,0) 72%); animation:cmHalo 3.8s ease-in-out infinite; pointer-events:none;}
+  .cross-mark .cm-sheen{position:absolute; inset:0; pointer-events:none; background:linear-gradient(115deg, rgba(255,248,214,0) 32%, rgba(255,248,214,.5) 50%, rgba(255,248,214,0) 68%); background-size:260% 100%; background-position:130% 0; -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 150'%3E%3Cpath d='M43 6 H57 V40 H80 V54 H57 V144 H43 V54 H20 V40 H43 Z' fill='%23fff'/%3E%3C/svg%3E"); -webkit-mask-size:100% 100%; -webkit-mask-repeat:no-repeat; mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 150'%3E%3Cpath d='M43 6 H57 V40 H80 V54 H57 V144 H43 V54 H20 V40 H43 Z' fill='%23fff'/%3E%3C/svg%3E"); mask-size:100% 100%; mask-repeat:no-repeat; animation:cmSheen 5.2s ease-in-out infinite;}
+  .cross-mark .cm-sparks{position:absolute; inset:0; pointer-events:none;}
+  .cross-mark .cm-sparks i{position:absolute; width:6px; height:6px; border-radius:50%; background:radial-gradient(circle, #fff3c4 0%, rgba(255,205,92,.85) 55%, rgba(255,205,92,0) 100%); opacity:0; animation:cmSpark 3.6s ease-in-out infinite;}
+  .cross-mark .cm-sparks i:nth-child(1){left:6%; top:64%; animation-delay:0s;}
+  .cross-mark .cm-sparks i:nth-child(2){left:88%; top:58%; animation-delay:.6s;}
+  .cross-mark .cm-sparks i:nth-child(3){left:16%; top:26%; animation-delay:1.2s;}
+  .cross-mark .cm-sparks i:nth-child(4){left:82%; top:20%; animation-delay:1.8s;}
+  .cross-mark .cm-sparks i:nth-child(5){left:30%; top:84%; animation-delay:2.4s;}
+  .cross-mark .cm-sparks i:nth-child(6){left:66%; top:88%; animation-delay:3s;}
+  .cross-mark.cm-done::after{content:""; position:absolute; left:50%; top:46%; width:200px; height:200px; transform:translate(-50%,-50%) scale(.35); border-radius:50%; border:2px solid rgba(255,220,130,.95); opacity:0; pointer-events:none; animation:cmRing .95s ease-out .05s 1 both;}
+  @keyframes cmFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+  @keyframes cmHalo{0%,100%{opacity:.55; transform:scale(.97);}50%{opacity:.95; transform:scale(1.05);}}
+  @keyframes cmSheen{0%{background-position:130% 0;}38%{background-position:-40% 0;}100%{background-position:-40% 0;}}
+  @keyframes cmSpark{0%{opacity:0; transform:translateY(6px) scale(.55);}35%{opacity:1;}70%{opacity:.85;}100%{opacity:0; transform:translateY(-14px) scale(1.1);}}
+  @keyframes cmRing{0%{opacity:.95; transform:translate(-50%,-50%) scale(.35);}100%{opacity:0; transform:translate(-50%,-50%) scale(1.25);}}
   /* (v93) popup CHON NHAN VAT: mac dinh an, bam o Nhan vat moi hien giua man hinh */
   #profileCard{position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:80; width:min(92vw,430px); max-height:86vh; overflow-y:auto; margin:0; background:linear-gradient(180deg,#261b10,#1a120a); box-shadow:0 18px 50px rgba(0,0,0,.6);}
   #profileShade{position:fixed; inset:0; background:rgba(8,5,2,.62); z-index:79;}
@@ -123,7 +141,7 @@
   .sound-row{display:flex; align-items:center; gap:8px; justify-content:center; color:#cbbd9d; font-size:13.5px; margin-top:14px;}
   /* (v21) đã bỏ .privacy-note (đoạn chữ hướng dẫn cuối màn hình chờ) */
   /* thông báo NHỎ (toast) — dùng khi hoàn thành chuỗi Mân Côi (v21) */
-  #toast{position:fixed; left:50%; top:18px; transform:translateX(-50%); z-index:3000; max-width:min(480px, 90vw); background:rgba(24,17,10,.95); color:#f3e9d2; border:1px solid rgba(217,169,74,.55); border-radius:999px; padding:10px 18px; font-size:13.5px; line-height:1.5; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.5);}
+  #toast{position:fixed; left:50%; top:60px; transform:translateX(-50%); z-index:3000; max-width:min(440px, 88vw); /* (v99) ha xuong duoi hang nut tren cung (hang nut cao 38px o top:12) — ban cu top:18px de len cum nut phai + o dem gio, anh cua Tri 22:39 cho thay thong bao cau nguyen che kin nut nhac */ background:rgba(24,17,10,.95); color:#f3e9d2; border:1px solid rgba(217,169,74,.55); border-radius:999px; padding:10px 18px; font-size:13.5px; line-height:1.5; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.5);}
   #toast.hidden{display:none;}
   /* (v51) THÔNG BÁO TOÀN PHÒNG khi có người dâng lời nguyện cho một linh hồn ở góc cầu nguyện tầng hầm */
   #soulBanner{position:fixed; left:50%; top:64px; transform:translateX(-50%); z-index:2900; width:min(520px, 92vw); background:linear-gradient(180deg, rgba(43,30,16,.97), rgba(28,19,10,.97)); color:#f6ead0; border:1px solid rgba(217,169,74,.75); border-radius:16px; padding:14px 20px 13px; text-align:center; box-shadow:0 16px 44px rgba(0,0,0,.6);}
@@ -450,8 +468,9 @@
   .rs-wrap svg{width:min(150px, 42vw); height:auto; display:block; touch-action:none; cursor:grab;} /* (v18) chuỗi vẽ nhỏ lại cho popup gọn; (v96) touch-action:none + cursor grab de keo xoay vong chuoi */
   .rb{transition:opacity .25s;}
   .rb-done{opacity:.4;}
-  .rb-now{fill:#f2c53d !important; filter:drop-shadow(0 0 6px rgba(242,197,61,.95)); transform-box:fill-box; transform-origin:center; animation:rbPulse 1.1s ease-in-out infinite;}
-  @keyframes rbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+  .rb-now{fill:#ffd94d !important; stroke:#fff3c4 !important; stroke-width:1.6;}
+  .rb-halo{pointer-events:none; animation:rbHaloPulse 1.1s ease-in-out infinite;} /* (v99) VONG SANG quanh hat dang doc — ve bang SVG thuan + nhap nhay bang opacity: ban cu dung filter drop-shadow + animation scale tren phan tu SVG, WebKit cua iPhone/Brave lam hong (hat khong phat sang, nhat la khi xoay vong) — Tri bao 18/11 */
+  @keyframes rbHaloPulse{0%,100%{opacity:.5}50%{opacity:1}}
   .rb-hit{fill:rgba(0,0,0,0); cursor:pointer;}
   /* (v19) ô đoạn kinh CAO TỰ NHIÊN vừa đúng nội dung từng bước — bỏ
      hẳn chiều cao cố định (392px ở v17, 200px ở v18) vì ô cố định để
@@ -555,8 +574,10 @@
   /* (v97) toa do quat cua cac nut (dockSign/Candle/Pray/Rosary/Char/Chat/Kinh theo left/top) DA GO cung ban mat troi moc — nut nay xep theo flex mot hang */
   .dock-btn{color:rgba(240,214,150,.88);}
   .dock-btn.on{color:#ffd977; background:radial-gradient(ellipse at center, rgba(255,205,92,.40) 0%, rgba(255,205,92,.14) 62%, transparent 100%); box-shadow:0 0 13px rgba(255,196,64,.5), inset 0 0 9px rgba(255,214,120,.3);}
-  .dock-btn:hover{background:rgba(201,162,39,.13);}
+  .dock-btn:hover{background:rgba(201,162,39,.13);} /* (v99) THANH DIEU KHIEN CHINH giu nguyen nen vang khi hover — Tri lam ro 22:43 "khong xoa o cac thanh dieu khien" */
   .dock-btn.on:hover{background:radial-gradient(ellipse at center, rgba(255,205,92,.46) 0%, rgba(255,205,92,.18) 62%, transparent 100%);}
+  #ctxDock .dock-btn:hover{background:transparent;} /* (v99) chi CUM NGU CANH (noi co nut "Cau cho linh hon") moi go nen vang hover theo yeu cau cua Tri (18/11 22:42): tren dien thoai hover dinh lai sau khi cham lam nut vang mai nhu dang focus */
+  #ctxDock .dock-btn.on:hover{background:radial-gradient(ellipse at center, rgba(255,205,92,.28) 0%, rgba(255,205,92,.10) 62%, transparent 100%);}
   .dock-btn:active{background:rgba(255,214,120,.3);}
   .dock-btn::after{background:var(--ivory); color:var(--ink2); border:1px solid rgba(201,162,39,.5); box-shadow:0 4px 12px rgba(90,64,20,.3);}
   @media (max-width:760px){
@@ -571,11 +592,23 @@
   #panel{background:var(--ivory); color:var(--ink2); border:1px solid var(--ivory-brd); border-bottom:none; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); box-shadow:0 -12px 44px rgba(90,64,20,.3);}
   /* (v96) DIEN THOAI: pop-up NHO LAI + NAM GIUA MAN HINH theo yeu cau cua Tri — ban cu la tam day (bottom sheet) phu het be ngang, cao qua nua man hinh */
   @media (max-width:760px){
-    #panelWrap{align-items:center; padding:18px 14px;}
-    #panel{width:100%; max-width:430px; max-height:80dvh; border-radius:20px; border-bottom:1px solid var(--ivory-brd); box-shadow:0 18px 50px rgba(0,0,0,.5); padding:16px 15px 18px; animation:itPop .18s ease;}
-    #panel h3{font-size:17px;}
-    #panel.rosary-mode{max-height:92dvh; overflow-y:auto;}
+    #panelWrap{align-items:center; padding:14px 20px;}
+    #panel{width:100%; max-width:336px; max-height:66dvh; border-radius:18px; border-bottom:1px solid var(--ivory-brd); box-shadow:0 18px 50px rgba(0,0,0,.5); padding:13px 13px 15px; animation:itPop .18s ease;}
+    #panel h3{font-size:15.5px;}
+    #panel .sub{font-size:12px; margin-bottom:9px;}
+    #panel .music-dark{padding:12px 12px 10px;}
+    #panel.rosary-mode{max-height:84dvh; overflow-y:auto;}
+    #profileCard{width:min(84vw,320px);}
+    #saintPop{width:min(268px,78vw); padding:11px 13px 10px;}
+    #saintPop .sp-name{font-size:15px;}
+    #saintPop .sp-text{font-size:12.5px; line-height:1.55;}
+    .wait-actions{gap:10px;}
+    .wait-actions button{width:76px; border-radius:15px; padding:7px 3px 6px;}
+    .wait-actions .wa-icon{font-size:22px;}
+    #tapHint{padding:12px 30px; font-size:16px;}
+    #toast{top:58px; max-width:82vw; padding:8px 14px; font-size:12.5px; line-height:1.45;}
   }
+  /* (v99) tren la doi thu HAI thu nho popup dien thoai: v96 da thu mot lan (430px/80dvh) nhung Tri van thay to (18/11 22:33) nen nay thu tiep xuong 336px/66dvh + gon luon popup chon nhan vat, the thong tin thanh, hai o vuong o man hinh cho va nut Nhan de vao */
   #panel h3{color:var(--ink-title);}
   #panel .sub{color:var(--ink-sub);}
   #panel input[type=text], #panel input[type=password], #panel textarea{background:rgba(0,0,0,.32); color:var(--ink2); border:1px solid rgba(201,162,39,.4);}
@@ -693,7 +726,7 @@
 <!-- ================= MÀN HÌNH TẢI DỮ LIỆU (tự vào nhà thờ) ================= -->
 <div id="loading">
   <div class="load-inner">
-    <div class="cross-mark"><span class="cm-base"><svg viewBox="0 0 100 150" aria-hidden="true"><path d="M43 6 H57 V40 H80 V54 H57 V144 H43 V54 H20 V40 H43 Z" fill="rgba(231,207,154,.14)" stroke="rgba(231,207,154,.30)" stroke-width="1.5"/></svg></span><span class="cm-fill" id="crossFill"><svg viewBox="0 0 100 150" aria-hidden="true"><defs><linearGradient id="cmGradF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9e29a"/><stop offset=".55" stop-color="#ecc96e"/><stop offset="1" stop-color="#b9892f"/></linearGradient></defs><path d="M43 6 H57 V40 H80 V54 H57 V144 H43 V54 H20 V40 H43 Z" fill="url(#cmGradF)"/></svg></span></div>
+    <div class="cross-mark"><span class="cm-base"><svg viewBox="0 0 100 150" aria-hidden="true"><path d="M43 6 H57 V40 H80 V54 H57 V144 H43 V54 H20 V40 H43 Z" fill="rgba(231,207,154,.14)" stroke="rgba(231,207,154,.30)" stroke-width="1.5"/></svg></span><span class="cm-fill" id="crossFill"><svg viewBox="0 0 100 150" aria-hidden="true"><defs><linearGradient id="cmGradF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9e29a"/><stop offset=".55" stop-color="#ecc96e"/><stop offset="1" stop-color="#b9892f"/></linearGradient></defs><path d="M43 6 H57 V40 H80 V54 H57 V144 H43 V54 H20 V40 H43 Z" fill="url(#cmGradF)"/></svg></span><span class="cm-sheen"></span><span class="cm-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
     <!-- (v72) ĐÃ XÓA dòng chữ "THÁNH ĐƯỜNG ONLINE" ở trang chờ theo yêu cầu của Trí (ảnh 344) — chỉ giữ Thánh Giá lớn ở trên cùng -->
 
 
@@ -871,14 +904,15 @@ const bootT0 = performance.now();
 /* NHÃN PHIÊN BẢN — hằng số DUY NHẤT của bản giao hàng: tăng số này ở mỗi đợt
    giao (v8, v9, ...) và ghi cùng số vào đầu README. Hiện nhỏ ở màn hình tải
    để người dùng nhìn là biết mình đang chạy bản nào, tránh lẫn bản cũ do cache. */
-const APP_VERSION = "v98";
-const QUALITY = (() => { const coarse = matchMedia("(pointer: coarse)").matches; const minSide = Math.min(screen.width, screen.height); const mob = coarse && minSide <= 1100; const phone = coarse && minSide <= 520; return { mobile: mob, phone, pixelCap: phone ? 1.25 : (mob ? 1.5 : 2), shadow: mob ? 1024 : 2048 }; })(); // (v95) phat hien dien thoai/tablet nho de chay che do nhe; (v96) them nac DIEN THOAI (canh nho <=520): pixelCap 1,25
+const APP_VERSION = "v99";
+const QUALITY = (() => { const coarse = matchMedia("(pointer: coarse)").matches; const minSide = Math.min(screen.width, screen.height); const mob = coarse && minSide <= 1100; const phone = coarse && minSide <= 520; return { mobile: mob, phone, pixelCap: 2, shadow: mob ? 1536 : 2048 }; })(); // (v95) phat hien dien thoai/tablet nho de chay che do nhe; (v99) Tri bao dien thoai "do hoa trong rat xau" — nguyen nhan chinh la pixelCap 1,25 lam mo nho: nang len 2 nhu may tinh, bu lai bang giam draw call (InstancedMesh con tien) + governor nhe tay hon
 /* (v96) BO TU DIEU CHINH DO HOA theo yeu cau cua Tri (dien thoai + may tinh "doi luc van giat lag"): do toc do khung hinh that — khung cham keo dai thi TU HA do phan giai render theo nac, nac cao nhat tat ca bloom; het nang thi tu nang lai (co do tre chong nhay nac). */
 let qLevel = 0, qFrames = 0, qAcc = 0, qLastT = 0, qCoolUntil = 0, qGoodStreak = 0, composerOff = false;
-const Q_SCALES = [1, 0.8, 0.62, 0.48];
+const Q_SCALES = [1, 0.88, 0.78, 0.7]; // (v99) nac ha nhe hon han (cu 0,8/0,62/0,48 lam hinh xau ro sau vai phut choi)
 function qApply(){
   if (!renderer) return;
-  const pr = Math.max(0.8, Math.min(devicePixelRatio || 1, QUALITY.pixelCap) * Q_SCALES[qLevel]);
+  const qBase = Math.min(devicePixelRatio || 1, QUALITY.pixelCap);
+  const pr = Math.max(Math.min(1.4, qBase), qBase * Q_SCALES[qLevel]); // (v99) san do net 1,4 tren dien thoai: governor ha toi da cung khong mo hon muc nay
   renderer.setPixelRatio(pr);
   renderer.setSize(innerWidth, innerHeight);
   if (composer){ composer.setPixelRatio(pr); composer.setSize(innerWidth, innerHeight); }
@@ -893,8 +927,8 @@ function qGovern(){
   if (qFrames < 80) return;
   const avg = qAcc / qFrames; qAcc = 0; qFrames = 0;
   if (now < qCoolUntil) return;
-  if (avg > 26 && qLevel < 3){ qLevel++; qGoodStreak = 0; qCoolUntil = now + 4000; qApply(); }
-  else if (avg < 13.5 && qLevel > 0){ if (++qGoodStreak >= 4){ qLevel--; qGoodStreak = 0; qCoolUntil = now + 6000; qApply(); } }
+  if (avg > 30 && qLevel < 3){ qLevel++; qGoodStreak = 0; qCoolUntil = now + 4000; qApply(); }
+  else if (avg < 13.5 && qLevel > 0){ if (++qGoodStreak >= 3){ qLevel--; qGoodStreak = 0; qCoolUntil = now + 6000; qApply(); } } // (v99) nguong ha 26 -> 30ms (chi ha khi giat that), phuc hoi nhanh hon (3 cua so tot)
   else qGoodStreak = 0;
 }
 const VERSION_LABEL = "Phiên bản 12/11 · " + APP_VERSION;
@@ -986,6 +1020,7 @@ function finishBoot(){
   if (bootState.finished) return;
   bootState.finished = true;
   clearInterval(bootTimer);
+  const cmk = document.querySelector(".cross-mark"); if (cmk) cmk.classList.add("cm-done"); // (v99) tai xong: vong sang lan toa mot lan quanh Thanh Gia cho
   const eb = document.getElementById("enterBtn");
   if (eb) eb.classList.remove("hidden");
   const th = document.getElementById("tapHint"); // (v92) tai xong -> nhap nhay "Nhan de vao nha tho"
@@ -1019,8 +1054,8 @@ function enterChurch(){
 }
 const bootTimer = setInterval(() => {
   const d = bootState.target - bootState.shown;
-  bootState.shown += d * 0.14; // nội suy mượt về phía mốc hiện tại; kẹt ở mốc nào thì % dừng ở đó
-  if (Math.abs(d) < 0.35) bootState.shown = bootState.target;
+  bootState.shown += d * 0.32; // (v99) TANG TOC tien trinh sang cua Thanh Gia cho theo yeu cau cua Tri (18/11): noi suy 0,14 -> 0,32 moi nhip 40ms (nhanh hon ~2,3 lan) // nội suy mượt về phía mốc hiện tại; kẹt ở mốc nào thì % dừng ở đó
+  if (Math.abs(d) < 0.6) bootState.shown = bootState.target;
   const pe = document.getElementById("loadPct");
   if (pe) pe.textContent = Math.floor(bootState.shown) + "%";
   const fe = document.getElementById("loadFill");
@@ -1949,9 +1984,9 @@ function initMaterials(){
   // sáng dìu như được đèn chùm hắt lên.
   MAT.vault = MAT.wallStone.clone(); MAT.vault.map = vaultTex; MAT.vault.side = THREE.DoubleSide; /* (v85) BO emissive nau 0x4a4234/0,35 cua vom theo yeu cau cua Tri (anh 458: "sua lai mau cac tuong va tran thong nhat cung mot mau"): chinh lop phat sang nay lam tran lech tong xam-nau so voi tuong; nay MAT.vault la ban sao nguyen cua MAT.wallStone (cung texture da, cung thong so) — tuong va tran mot mau duy nhat */ // (v84) nang nhe mat vom huong xuong (tuong dung an sang hon tran nam ngang) de hai be cung mot tong tren may cua Tri (anh 425) // (v83) TRẦN DÙNG ĐÚNG VẬT LIỆU CỦA TƯỜNG (clone của MAT.wallStone, chỉ thay map đã chỉnh repeat cho vỏ) theo yêu cầu của Trí: "sửa màu của trần giống với màu của tường" // (v72) TRẦN CÙNG MÀU TƯỜNG theo yêu cầu của Trí (ảnh 343): BỎ emissive tự phát sáng 0,2 — chính nó làm trần sáng phẳng lệch tông so với 4 tường; nay trần dùng đúng texture đá tường (vaultTex là clone của stoneWallTex) và ăn sáng như tường
   const yardTex = yardTileTexture(); yardTex.repeat.set(20, 13); // sân 40x26m, mỗi ô đá đúng ~1m
-  MAT.yardStone = new THREE.MeshStandardMaterial({ map: yardTex, roughness: 0.52, envMapIntensity: 0.28 }); // (v72) GIẢM MEN BÓNG theo phản ánh của Trí (ảnh 334: sân CHÓI TRẮNG, nhân vật cháy sáng): bản v71 (0,24 + env 0,7) phản chiếu nắng thành vệt gương + bloom loé giữa sân; nay roughness 0,52 + env 0,28 — gạch còn ánh men nhẹ, hết vệt chói
+  MAT.yardStone = new THREE.MeshStandardMaterial({ map: yardTex, roughness: 0.74, envMapIntensity: 0.14 }); // (v72) GIẢM MEN BÓNG theo phản ánh của Trí (ảnh 334: sân CHÓI TRẮNG, nhân vật cháy sáng): bản v71 (0,24 + env 0,7) phản chiếu nắng thành vệt gương + bloom loé giữa sân; nay roughness 0,52 + env 0,28 — gạch còn ánh men nhẹ, hết vệt chói // (v99) giam bong THEM (0,52 -> 0,74, env 0,28 -> 0,14): vet phan chieu truot tren mat san theo goc camera la nguon soc nhap nhay khi di chuyen/xoay nhin trong video Tri gui 22:26 18/11 — san nay gan nhu da mo, het vet sang bo
   const yardGroundTex = yardTex.clone(); yardGroundTex.repeat.set(85, 85); yardGroundTex.needsUpdate = true; // (v49) nền đất quanh sân: cùng họa tiết đá ô ~1m
-  MAT.yardGround = new THREE.MeshStandardMaterial({ map: yardGroundTex, roughness: 0.58, envMapIntensity: 0.22 }); // (v72) vành quanh sân giảm bóng đồng bộ (hết chói như sân chính)
+  MAT.yardGround = new THREE.MeshStandardMaterial({ map: yardGroundTex, roughness: 0.76, envMapIntensity: 0.12 }); // (v72) vành quanh sân giảm bóng đồng bộ (hết chói như sân chính) // (v99) giam bong them dong bo voi yardStone chong soc nhap nhay
   const goldWoodTex = goldWoodTexture(); goldWoodTex.repeat.set(2, 10);
   MAT.goldWood = new THREE.MeshStandardMaterial({ map: goldWoodTex, roughness: 0.78, side: THREE.DoubleSide });
   MAT.marble = new THREE.MeshStandardMaterial({ map: marbleTex, roughness: 0.45 });
@@ -2436,6 +2471,31 @@ function buildWorld(){
     }
   });
   }); // hết pha nave: cửa sổ kính
+  // (v99) VOM KINH O MAT NGOAI hai tuong hong theo yeu cau cua Tri (anh 560): ben trong co 6 o kinh mau hanh lang gac (wz 9..-33,2, tam y 13,35) nhung mat ngoai tuong chi la da dac nen tu san nhin len thay tuong tron — nay them DUNG cac o kinh do o mat ngoai (tam x ±18,58, khung da vom nhô 18,5..18,62) dung cung hoa tiet kinh voi o ben trong cung vi tri.
+  {
+    const extFrameShape = (w, topY, asPath) => {
+      const sh = asPath ? new THREE.Path() : new THREE.Shape(), hw = w / 2, r = hw, cy = topY - r;
+      sh.moveTo(-hw, 0); sh.lineTo(-hw, cy); sh.absarc(0, cy, r, Math.PI, 0, true); sh.lineTo(hw, 0); sh.closePath();
+      return sh;
+    };
+    const extFrameSh = extFrameShape(3.76, 8.88, false);
+    extFrameSh.holes.push(extFrameShape(3.4, 8.7, true));
+    const extFrameGeo = new THREE.ExtrudeGeometry(extFrameSh, { depth: 0.12, bevelEnabled: false, curveSegments: 24 });
+    [9, 0, -9, -18, -27, -33.2].forEach((wz, i) => {
+      for (const sx of [-1, 1]){
+        const fr = new THREE.Mesh(extFrameGeo, MAT.stoneLight);
+        fr.rotation.y = sx * Math.PI / 2;
+        fr.position.set(sx * 18.5, 9.0, wz);
+        scene.add(fr);
+        const tex2 = stainedGlassTexture(i + (sx > 0 ? 3 : 0));
+        tex2.repeat.set(1 / 3.4, 1 / 8.7); tex2.offset.set(0.5, 0.5);
+        const gm2 = new THREE.Mesh(winGeo, new THREE.MeshStandardMaterial({ map: tex2, emissive: 0xffffff, emissiveMap: tex2, emissiveIntensity: 0.9, transparent: true, roughness: 0.4, side: THREE.DoubleSide, depthWrite: false }));
+        gm2.position.set(sx * 18.58, 13.35, wz);
+        gm2.rotation.y = sx > 0 ? Math.PI / 2 : -Math.PI / 2;
+        scene.add(gm2);
+      }
+    });
+  }
   // (v39 — image-52) ĐÃ GỠ HẲN hệ hạt bụi sáng bay trong nave theo
   // yêu cầu của Trí ("bỏ đi những vệt sáng bay bay"). Hiệu ứng theo
   // hành động (chữ bay + hạt khi dâng lời nguyện, lửa nến) là hệ RIÊNG
@@ -3567,6 +3627,7 @@ function buildChandeliers(){
   const flameM = new THREE.MeshStandardMaterial({ color: 0xffdf9e, emissive: 0xffb84d, emissiveIntensity: 2.4, roughness: 0.4 });
   const crystal = new THREE.MeshStandardMaterial({ color: 0xf4fbff, roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0.85, emissive: 0xbfd9e8, emissiveIntensity: 0.3 });
   const TOPY = 32.0; // (v79) neo vào sống lồng đèn MỚI (yEdge + 1,95 ~ 27,24) // sống giếng trời theo trần nâng v73
+  const chBase = [], chWax = [], chFlame = [], chDrop = [], chRod = []; // (v99) gom chi tiet lap cua 180 cay nen den chum (moi cay 5 chi tiet x 36 nen x 5 chum ~ 900 mesh) de dung thanh InstancedMesh — giam gan 900 draw call tren MOI may, hinh anh khong doi
   const mk = (z) => {
     const g = new THREE.Group(); g.position.set(0, 0, z);
     const cyl = (r, h, m, x, y, zz) => { const c = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 10), m); c.position.set(x, y, zz); c.castShadow = false; g.add(c); return c; };
@@ -3592,14 +3653,12 @@ function buildChandeliers(){
       t.rotation.x = Math.PI / 2; t.position.set(0, y, 0); g.add(t);
       for (let i = 0; i < n; i++){
         const a = (i / n) * Math.PI * 2, cx = Math.cos(a) * R, cz = Math.sin(a) * R;
-        cyl(0.05, 0.05, MAT.gold, cx, y + 0.04, cz);        // đế nến
-        cyl(0.032, 0.3, wax, cx, y + 0.21, cz);             // thân nến trắng
-        const f = new THREE.Mesh(new THREE.SphereGeometry(0.037, 8, 8), flameM);
-        f.scale.y = 1.7; f.position.set(cx, y + 0.44, cz); g.add(f);
+        chBase.push([cx, y + 0.04, z + cz]);                // (v99) de nen -> instanced
+        chWax.push([cx, y + 0.21, z + cz]);                 // (v99) than nen trang -> instanced
+        chFlame.push([cx, y + 0.44, z + cz]);               // (v99) ngon lua -> instanced
         addGlow(cx, y + 0.46, cz, 0.5, 0.26, g);
-        const dr = new THREE.Mesh(dropGeo, crystal);       // hạt pha lê rủ dưới vành
-        dr.position.set(cx * 0.97, y - 0.17, cz * 0.97); dr.scale.y = 1.5; g.add(dr);
-        rod(0, y + 0.62, 0, cx * 0.99, y + 0.02, cz * 0.99, 0.018, MAT.goldTrim); // tay cong đỡ vành (thanh xiên từ trục)
+        chDrop.push([cx * 0.97, y - 0.17, z + cz * 0.97]);  // (v99) hat pha le ru -> instanced
+        chRod.push([0, y + 0.62, z, cx * 0.99, y + 0.02, z + cz * 0.99]); // (v99) tay cong do vanh -> instanced (hai dau doan thang, toa do the gioi)
       }
     };
     ring(1.30, 17.25, 16); // (v91) vanh +2,2 — tang 2 dung thay Thanh Gia // (v85) cac vanh +1,6 (anh 447: den chum len cao them) // (v84) các vành +0,7 theo cụm đèn kéo lên
@@ -3613,6 +3672,17 @@ function buildChandeliers(){
     zoneNaveGroup.add(g);
   };
   for (const z of [-29, -20.5, -12, -3.5, 3.5]) mk(z);
+  { // (v99) DUNG cac chi tiet nen den chum thanh 5 InstancedMesh (~900 mesh -> 5 draw call)
+    const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _p = new THREE.Vector3(), _s = new THREE.Vector3(), _up = new THREE.Vector3(0, 1, 0), _d = new THREE.Vector3();
+    const mkInst = (geo, mat, list, sy) => { const im = new THREE.InstancedMesh(geo, mat, list.length); list.forEach((p, i) => { _p.set(p[0], p[1], p[2]); _q.identity(); _s.set(1, sy || 1, 1); _m.compose(_p, _q, _s); im.setMatrixAt(i, _m); }); im.frustumCulled = false; zoneNaveGroup.add(im); };
+    mkInst(new THREE.CylinderGeometry(0.05, 0.05, 0.05, 10), MAT.gold, chBase);
+    mkInst(new THREE.CylinderGeometry(0.032, 0.032, 0.3, 10), wax, chWax);
+    mkInst(new THREE.SphereGeometry(0.037, 8, 8), flameM, chFlame, 1.7);
+    mkInst(new THREE.OctahedronGeometry(0.055), crystal, chDrop, 1.5);
+    const rodIM = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.018, 0.018, 1, 8), MAT.goldTrim, chRod.length);
+    chRod.forEach((r, i) => { _p.set(r[0], r[1], r[2]); _d.set(r[3] - r[0], r[4] - r[1], r[5] - r[2]); const len = _d.length(); _p.addScaledVector(_d, 0.5); _q.setFromUnitVectors(_up, _d.normalize()); _s.set(1, len, 1); _m.compose(_p, _q, _s); rodIM.setMatrixAt(i, _m); });
+    rodIM.frustumCulled = false; zoneNaveGroup.add(rodIM);
+  }
 }
 /* ----- (v39) HỆ TƯỜNG THỐNG NHẤT — "lớp áo kiến trúc" áp cho MỌI mặt
    tường trong/ngoài cùng một ngôn ngữ: gờ chân tường (skirting), gờ
@@ -5438,7 +5508,8 @@ function buildLoft(){
     [31.28, 7.6, -2.34, 9.7],
     [4.66, 2.55, 15.63, 7.175],
     [4.66, 2.55, 15.63, 12.225],
-  ]; // (v93) SAN GAC THANG THANG: phien tay lien toi x 13,3; ba phien quanh GIENG CHU NHAT (x 13,3..16,55, z 8,45..10,95) + phien SAN DAP dong x 16,55..17,96
+    [2.75, 2.5, 14.675, 9.7],
+  ]; // (v93) SAN GAC THANG THANG: phien tay lien toi x 13,3; ba phien quanh GIENG CHU NHAT (x 13,3..16,55, z 8,45..10,95) + phien SAN DAP dong x 16,55..17,96 // (v99) phien thu 4 LAP KIN GIENG THANG (x 13,3..16,05, z 8,45..10,95) — cau thang da xoa, nen gac lien mot mat giong xung quanh (checkerTopMat theo toa do the gioi nen van da lien mach)
   for (const [w, d, cx, cz] of slabPieces){
     const sl = box(w, 0.32, d, checkerTopMat(w, d, cx, cz), cx, LOFT_Y - 0.16, cz);
     sl.receiveShadow = true;
@@ -5447,7 +5518,7 @@ function buildLoft(){
   {
     // (v93) DA DUOI SAN NAM: 4 tam phang khop 4 phien hop phia
     // tren (bo da khoet lo TRON cua thang xoan)
-    for (const [w2, d2, cx2, cz2] of [[31.28, 7.6, -2.34, 9.7], [4.66, 2.55, 15.63, 7.175], [4.66, 2.55, 15.63, 12.225], ]){
+    for (const [w2, d2, cx2, cz2] of [[31.28, 7.6, -2.34, 9.7], [4.66, 2.55, 15.63, 7.175], [4.66, 2.55, 15.63, 12.225], [2.75, 2.5, 14.675, 9.7], ]){ // (v99) da duoi phien lap gieng
       const sk = new THREE.Mesh(new THREE.PlaneGeometry(w2, d2), MAT.loftUnder);
       sk.rotation.x = Math.PI / 2; sk.position.set(cx2, LOFT_Y - 0.325, cz2); scene.add(sk);
     }
@@ -5475,10 +5546,8 @@ function buildLoft(){
   [[0.0, 0.0], [0.17, 0.0], [0.17, 0.05], [0.12, 0.09], [0.105, 0.16], [0.115, 0.34], [0.13, 0.5], [0.115, 0.64], [0.085, 0.74], [0.08, 0.78], [0.115, 0.83], [0.12, 0.87], [0.07, 0.91], [0.125, 0.98], [0.13, 1.03], [0.09, 1.09], [0.0, 1.11]].forEach(p => newelPts.push(new THREE.Vector2(p[0], p[1])));
   const NEWEL_GEO = new THREE.LatheGeometry(newelPts, 16); // (v94) cot tien tron dau thang, dinh qua cau (anh 544)
   const PLINTH_GEO = new THREE.BoxGeometry(0.17, 0.05, 0.17);
-  function addBaluster(parent, x, yBase, z, mat){
-    const pl = new THREE.Mesh(PLINTH_GEO, mat || MAT.altarStone); pl.position.set(x, yBase + 0.025, z); parent.add(pl);
-    const b = new THREE.Mesh(BAL_GEO, mat || MAT.altarStone); b.position.set(x, yBase + 0.05, z); b.castShadow = true; parent.add(b);
-  }
+  const balList = []; // (v99) gom vi tri con tien, dung thanh InstancedMesh o cuoi buildLoft (giam ~630 draw call)
+  function addBaluster(parent, x, yBase, z, mat){ balList.push([x, yBase, z]); }
   /* (v96) TAY VIN KIEU MOI theo yeu cau cua Tri ("lam lai tay vin khac, dep hon"): bo tam phang cu — de phang rong 0,34 + vom tron ban kinh 0,15 chay doc tren cung, goc nhom dat tai DAY tay vin (noi tiep dinh con tien) */
   function handrail(len, mat){
     const g = new THREE.Group();
@@ -5486,6 +5555,20 @@ function buildLoft(){
     const dg = new THREE.CylinderGeometry(0.15, 0.15, len, 14, 1, false, 0, Math.PI); dg.rotateZ(Math.PI / 2);
     const dm = new THREE.Mesh(dg, mat); dm.position.y = 0.05; dm.castShadow = true; g.add(dm);
     return g;
+  }
+  /* (v99) LAN CAN TRU VUONG kieu anh 554 cua Tri (dinh cau thang): song VUONG dung giua hai tam da phang (go chan + nap tren), COT VUONG TO o cac goc/dau doan — thay con tien binh hoa o khu vuc DINH THANG (chieu nghi + mieng gieng + doc thang); mat truoc + hanh lang van giu con tien cam thach anh 543 */
+  const SQPOST_GEO = new THREE.BoxGeometry(0.13, 0.62, 0.13);
+  function sqRailRun(parent, x0, z0, x1, z1, yBase, mat){
+    const len = Math.hypot(x1 - x0, z1 - z0), cxm = (x0 + x1) / 2, czm = (z0 + z1) / 2, alongZ = Math.abs(z1 - z0) > Math.abs(x1 - x0);
+    box(alongZ ? 0.28 : len, 0.14, alongZ ? len : 0.28, mat, cxm, yBase + 0.07, czm, parent);
+    box(alongZ ? 0.32 : len, 0.11, alongZ ? len : 0.32, mat, cxm, yBase + 0.815, czm, parent);
+    const n = Math.max(1, Math.round(len / 0.36));
+    for (let i = 0; i < n; i++){ const t = (i + 0.5) / n; const p = new THREE.Mesh(SQPOST_GEO, mat); p.position.set(x0 + (x1 - x0) * t, yBase + 0.45, z0 + (z1 - z0) * t); p.castShadow = true; parent.add(p); }
+  }
+  function sqNewel(parent, x, yBase, z, mat, h){
+    const hh = h || 1.04;
+    box(0.34, hh, 0.34, mat, x, yBase + hh / 2, z, parent);
+    box(0.43, 0.07, 0.43, mat, x, yBase + hh + 0.035, z, parent);
   }
   const hrF = handrail(24.3, MAT.altarStone); hrF.position.set(0, LOFT_Y + 1.0, 6.05); scene.add(hrF); // (v96) tay vin vom tron thay tam phang v94
   box(24.3, 0.12, 0.30, MAT.altarStone, 0, LOFT_Y + 0.06, 6.05); // (v94) GO CHAN cam thach (bo thanh giua — con tien cao het khoang nhu anh 543)
@@ -5495,9 +5578,7 @@ function buildLoft(){
   // bo tren gac di theo truc thang (z 9,7) se dung chet o mep
   // gieng cach chieu nghi 3,7m ma khong thay ly do; nay co lan
   // can cam thach dong bo, loi vao thang o hai dai san hai ben
-  const hrW = handrail(2.5, MAT.altarStone); hrW.rotation.y = Math.PI / 2; hrW.position.set(13.3, LOFT_Y + 1.0, 9.7); scene.add(hrW); // (v96) tay vin vom tron
-  box(0.30, 0.12, 2.5, MAT.altarStone, 13.3, LOFT_Y + 0.06, 9.7);
-  for (let wz = 8.62; wz <= 10.85; wz += 0.34) addBaluster(scene, 13.3, LOFT_Y + 0.12, wz);
+  // (v99) LAN CAN MIENG GIENG DA XOA — gieng da lap kin thanh san lien, tren tang khong con gi lien quan cau thang theo yeu cau cua Tri (anh 557)
   // (v91) TRU DA + CAU VANG o dau TAY khe lan can (7,95; 6,05) DA XOA theo anh 530 khoanh do cua Tri — loi ra dau thang giu thoang
   { // (v91) COT DEN LONG dau DONG khe lan can (12,15; 6,05) — can doi voi lan can mat truoc san co (anh 530)
     const hg = new THREE.Group(); hg.position.set(12.15, LOFT_Y, 6.05); scene.add(hg);
@@ -5562,6 +5643,13 @@ function buildLoft(){
       }
     }
   }
+  { // (v99) DUNG CON TIEN thanh 2 InstancedMesh: mat truoc + 2 hanh lang ~317 con x 2 mesh = ~634 draw call -> con 2
+    const _bm = new THREE.Matrix4();
+    const iP = new THREE.InstancedMesh(PLINTH_GEO, MAT.altarStone, balList.length);
+    const iB = new THREE.InstancedMesh(BAL_GEO, MAT.altarStone, balList.length);
+    balList.forEach((p, i) => { _bm.makeTranslation(p[0], p[1] + 0.025, p[2]); iP.setMatrixAt(i, _bm); _bm.makeTranslation(p[0], p[1] + 0.05, p[2]); iB.setMatrixAt(i, _bm); });
+    iB.castShadow = true; iP.frustumCulled = false; iB.frustumCulled = false; scene.add(iP); scene.add(iB);
+  }
   buildGalleryArcade(); // (v72) hàng cột + vòm cuốn dọc hai hành lang gác (ảnh 326)
   // (v42 — điểm 29) MODEL THANG XOẮN (GLB): trụ giữa + 24 bậc quạt
   // xoắn 1 vòng tại tâm (7,7; 8,1). Người chơi TỰ ĐI BỘ XOẮN LÊN:
@@ -5608,10 +5696,11 @@ function buildLoft(){
     const sf = wallBox(slopeL + 1.5, 1.15, 2.06, MAT.wallStone, ST2.x0 + runL / 2 + Math.sin(th) * 0.575, riseL / 2 - 0.28 - Math.cos(th) * 0.575, ST2.z, stairG);
     sf.rotation.z = th; sf.receiveShadow = true; sf.castShadow = true;
   }
-  // (v94) LAN CAN THANG (anh 543 tren cau truc anh 541):
-  // con tien CAM THACH cao het khoang tu go doc len tay vin
-  // (BO tam dac cua v93), tay vin phang rong, cot vuong nap
-  // phang o chan thang / diem noi chieu nghi / cuoi chieu nghi
+  // (v99) LAN CAN THANG theo anh 554 cua Tri: doc thang = TAY VIN GO SAM
+  // chay doc + SONG VUONG MANH cung mau (khong go chan doc, song cam
+  // thang xuong mat bac); chieu nghi = LAN CAN TRU VUONG da sang +
+  // COT VUONG TO o chan thang / hai ben loi ho / cuoi chieu nghi
+  const SPINDLE_GEO = new THREE.BoxGeometry(0.055, 0.94, 0.055);
   for (const side of [-1, 1]){
     const lz = ST2.z + side * (ST2.w / 2 - 0.02);
     const hAt = sx => (sx - ST2.x0) / 10.15 * 8.75;
@@ -5623,35 +5712,29 @@ function buildLoft(){
       const dir = vb.clone().sub(va), len = dir.length(); dir.normalize();
       const zAx = new THREE.Vector3(0, 0, side);
       const yAx = new THREE.Vector3().crossVectors(zAx, dir).normalize();
-      if (yAx.y < 0) yAx.multiplyScalar(-1); // (v96) ben NAM (side -1): tich cheo cho phap tuyen huong XUONG -> go chan + tay vin chim han vao than thang, con tien dung tro khong tay vin (anh 551/552 cua Tri) — ep phap tuyen luon huong LEN nhu ben bac
+      if (yAx.y < 0) yAx.multiplyScalar(-1); // (v96) giu phap tuyen huong LEN ca hai ben
       const zAx2 = new THREE.Vector3().crossVectors(dir, yAx).normalize();
       const mtx = new THREE.Matrix4().makeBasis(dir, yAx, zAx2);
-      const base = new THREE.Mesh(new THREE.BoxGeometry(len + 0.05, 0.16, 0.30), MAT.wallStone);
-      base.quaternion.setFromRotationMatrix(mtx);
-      base.position.copy(va).add(vb).multiplyScalar(0.5).addScaledVector(yAx, 0.08);
-      stairG.add(base);
-      const rail = handrail(len + 0.08, MAT.wallStone);
+      const rail = new THREE.Mesh(new THREE.BoxGeometry(len + 0.06, 0.10, 0.27), MAT.woodDark);
       rail.quaternion.setFromRotationMatrix(mtx);
       rail.position.copy(va).add(vb).multiplyScalar(0.5).addScaledVector(yAx, 0.99);
+      rail.castShadow = true;
       stairG.add(rail);
     }
-    for (let sx = ST2.x0 + 0.32; sx <= 15.95; sx += 0.34){
-      const b = new THREE.Mesh(BAL_GEO, MAT.wallStone);
-      b.position.set(sx, hAt(sx) + 0.16, lz); b.castShadow = true; stairG.add(b);
+    for (let sx = ST2.x0 + 0.30; sx <= 15.98; sx += 0.29){
+      const sp = new THREE.Mesh(SPINDLE_GEO, MAT.woodDark);
+      sp.position.set(sx, hAt(sx) + 0.55, lz); stairG.add(sp);
     }
-    wallBox(0.42, 0.12, 0.30, MAT.wallStone, 16.21, LOFT_Y + 0.06, lz, stairG); // (v96) go chan chieu nghi DOAN TAY (cat loi ho 16,42..17,48)
-    wallBox(0.47, 0.12, 0.30, MAT.wallStone, 17.715, LOFT_Y + 0.06, lz, stairG); // (v96) go chan chieu nghi DOAN DONG
-    const hrL1 = handrail(0.42, MAT.wallStone); hrL1.position.set(16.21, LOFT_Y + 1.0, lz); stairG.add(hrL1); // (v96) tay vin doan tay
-    const hrL2 = handrail(0.47, MAT.wallStone); hrL2.position.set(17.715, LOFT_Y + 1.0, lz); stairG.add(hrL2); // (v96) tay vin doan dong
-    for (let sx = 16.30; sx <= 17.85; sx += 0.34){ if (sx > 16.38 && sx < 17.52) continue; addBaluster(stairG, sx, LOFT_Y + 0.12, lz, MAT.wallStone); } // (v96) con tien thua o khoang loi ho
-    const mkPost3 = (px, baseY2) => {
-      wallBox(0.42, 0.10, 0.42, MAT.wallStone, px, baseY2 + 0.05, lz, stairG);
-      const np = new THREE.Mesh(NEWEL_GEO, MAT.wallStone); np.position.set(px, baseY2 + 0.10, lz); np.castShadow = true; stairG.add(np);
-    };
+    sqRailRun(stairG, 16.05, lz, 16.44, lz, LOFT_Y, MAT.wallStone); // (v99) chieu nghi doan tay (loi ho 16,44..17,46 giu nguyen duong di)
+    sqRailRun(stairG, 17.46, lz, 17.96, lz, LOFT_Y, MAT.wallStone); // (v99) chieu nghi doan dong
+    const mkPost3 = (px, baseY2) => { sqNewel(stairG, px, baseY2, lz, MAT.wallStone, 1.04); };
     mkPost3(ST2.x0 - 0.18, 0);
     mkPost3(16.02, LOFT_Y);
+    mkPost3(16.44, LOFT_Y);
+    mkPost3(17.46, LOFT_Y);
     mkPost3(17.90, LOFT_Y);
   }
+  stairG.clear(); // (v99) XOA LUON CAU THANG tam thoi theo yeu cau cua Tri (18/11, anh 555/556/557): xoa sach bac + than thang + chieu nghi + lan can doc + cot dau thang; gieng da lap kin o buildLoft, he leo thang vo hieu hoa o inSpiralZone/inSpiralRun/inStairwell/stairMass + an nut Len/Xuong tang. Muon dung lai thang: bo dong nay + bo cac dong "return false (v99)" trong 4 ham do
   loftTapTargets.push(stairG);
   // (v67) ĐÃ XÓA ĐÀN ORGAN trên gác theo yêu cầu của Trí (cùng 2 hàng ghế gác + thảm đỏ gác)
   // GIÁ NẾN GÁC ĐÀN (điểm "loft") — cùng kiểu votive nhiều tầng như dưới nhà thờ
@@ -6583,7 +6666,7 @@ function buildFrontYard(){
     // không bậc như ảnh 200 của Trí.
     for (let s = 0; s < 3; s++){
       const topY = -0.45 * (s + 1), h = topY + 1.8;
-      const stp = box(29.15, h, 0.6, yardStoneSized(29.15, 0.6), sx * (20.3 + s * 0.6), -1.8 + h / 2, 28.02);
+      const stp = box(26.9, h, 0.6, yardStoneSized(26.9, 0.6, 0.825), sx * (20.3 + s * 0.6), -1.8 + h / 2, 26.9); // (v99) CAT doan duoi thua z 40,35..42,6 nho ra phia nam khoi mat bac truoc (anh 559 cua Tri: "phan bac cap nho ra canh 2 cay xanh") — bac hong nay gio cham dut NGANG mat nam cua thang truoc (z 40,35); 0.825 = lech pha o da frac(-40,35/2)
       stp.rotation.y = Math.PI / 2; stp.receiveShadow = true;
     }
     // (v79) BẬC CẤP DỌC HÔNG NHÀ THỜ NỐI LIỀN NHAU (ảnh 359 của Trí):
@@ -6594,7 +6677,7 @@ function buildFrontYard(){
     for (const [off, top] of [[0.3, 0], [0.9, -0.45], [1.5, -0.9], [2.1, -1.35]]){
       const hgt = top + 1.8;
       for (const [z0, z1] of [[-36.6, -24.9], [-16.6, 13.45]]){
-        const stp2 = box(z1 - z0, hgt, 0.6, yardStoneSized(z1 - z0, 0.6), sx * (18.5 + off), top - hgt / 2, (z0 + z1) / 2);
+        const stp2 = box(z1 - z0, hgt, 0.6, yardStoneSized(z1 - z0, 0.6, (((-z1 / 2) % 1) + 1) % 1), sx * (18.5 + off), top - hgt / 2, (z0 + z1) / 2); // (v99) pha o da theo z1: mach da thang hang voi bac truoc + doan cua hong
         stp2.rotation.y = Math.PI / 2; stp2.receiveShadow = true;
       }
     }
@@ -6803,11 +6886,12 @@ function buildYardGarden(){
    co repeat (20,13) chuan cho phien san 40x26m; dung nguyen cho cac dai bac
    hep dai (0,6 x 12-30m) thi hoa tiet bi keo thanh soc dai nhu van go doc
    chan tuong. Ban sao texture nay co repeat theo met (moi o ~1m nhu san). */
-function yardStoneSized(w, d){
+function yardStoneSized(w, d, ox){
   const t = MAT.yardStone.map.clone();
   t.repeat.set(Math.max(0.3, w / 2), Math.max(0.3, d / 2));
+  if (ox) t.offset.x = ox; // (v99) lech pha o da theo toa do the gioi de mach da chay LIEN nhau giua cac doan bac hong (Tri: bac nhin khong deu)
   t.needsUpdate = true;
-  return new THREE.MeshStandardMaterial({ map: t, roughness: 0.52, envMapIntensity: 0.28 });
+  return new THREE.MeshStandardMaterial({ map: t, roughness: 0.74, envMapIntensity: 0.14 }); // (v99) dong bo do bong voi MAT.yardStone (chong vet phan chieu truot gay soc nhap nhay tren bac cap)
 }
 function buildYardDecor(){
   const soilMat = new THREE.MeshStandardMaterial({ color: 0x4a3826, roughness: 1 });
@@ -7210,12 +7294,9 @@ function buildSideDoors(){
     // Cao độ bậc giữ khớp yardFloorY: 0 / −0,45 / −0,90 / −1,35 / −1,8.
     for (const [off, top] of [[0.3, 0], [0.9, -0.45], [1.5, -0.9], [2.1, -1.35]]){
       const hgt = top + 1.8;
-      const sdst = box(SIDE_DOOR.w + 1.7, hgt, 0.6, yardStoneSized(SIDE_DOOR.w + 1.7, 0.6), sx * (18.5 + off), top - hgt / 2, dz); sdst.rotation.y = Math.PI / 2; // (v84) bậc cửa hông ĐỔI sang yardStone GIỐNG HỆT hai dãy bậc dọc hai bên (ảnh 435 của Trí) — bản cũ stoneLight trơn nên dãy giữa lạc tông
+      const sdst = box(SIDE_DOOR.w + 1.7, hgt, 0.6, yardStoneSized(SIDE_DOOR.w + 1.7, 0.6, (((-(dz + (SIDE_DOOR.w + 1.7) / 2) / 2) % 1) + 1) % 1), sx * (18.5 + off), top - hgt / 2, dz); sdst.rotation.y = Math.PI / 2; // (v99) pha o da cung cong thuc voi bac doc hong // (v84) bậc cửa hông ĐỔI sang yardStone GIỐNG HỆT hai dãy bậc dọc hai bên (ảnh 435 của Trí) — bản cũ stoneLight trơn nên dãy giữa lạc tông
     }
-    for (const cz of [-1, 1]) for (const [off, top] of [[0.3, 0], [0.9, -0.45], [1.5, -0.9], [2.1, -1.35]]){
-      const chh = top + 1.92;
-      box(0.62, chh, 0.35, MAT.stone, sx * (18.5 + off), top + 0.12 - chh / 2, dz + cz * 4.25); // (v79) má đá ra theo bậc RỘNG mới (cửa 6,4 -> bậc 8,1)
-    }
+    // (v99) DA XOA hai MA DA hai dau bac cua hong theo yeu cau sua bac cho deu cua Tri (anh 558): ma da nho 0,12m CAO HON mat bac tuong ung o ca hai dau dai bac, nhin vao nhu bac bi lech go — go bo de dai bac phang sach nhu bac doc hong va bac truoc.
   }
 }
 function updateSideDoors(dt){
@@ -7379,8 +7460,8 @@ function buildFacade(){
   // (ảnh 249): chân Thánh Giá cắm vào đỉnh nhọn (đỉnh thế giới
   // y 12,05): thân cao 1,6, tâm y = 12,05 + 0,72 = 12,77; xà ngang
   // ở 74% chiều cao như cũ (y 13,15).
-  box(0.26, 2.6, 0.26, MAT.gold, 0, 12.9, 14); // (v84) Thánh Giá giữa mặt tiền TO + CAO hơn theo yêu cầu của Trí: thân 2,6 (11,6..14,2) thay 1,6 (đỉnh cũ 13,57), dày 0,26
-  box(1.45, 0.26, 0.26, MAT.gold, 0, 13.55, 14); // (v84) xà ngang 1,45 thay 0,95, ở ~74% thân mới
+  box(0.26, 2.6, 0.26, MAT.gold, 0, 12.9, 14.48); // (v84) Thánh Giá giữa mặt tiền TO + CAO hơn theo yêu cầu của Trí: thân 2,6 (11,6..14,2) thay 1,6 (đỉnh cũ 13,57), dày 0,26 // (v99) DOI RA MAT NGOAI dau hoi z 14 -> 14,48: ban cu nam LOT HAN trong khoi dau hoi duc (13,65..14,35) nen tu san khong thay Thanh Gia — dung la diem Tri bao "bi mat thanh gia truoc tuong nha tho tren cao" (anh 560)
+  box(1.45, 0.26, 0.26, MAT.gold, 0, 13.55, 14.48); // (v84) xà ngang 1,45 thay 0,95, ở ~74% thân mới // (v99) ra mat ngoai cung than
   addCollider(-11.2, -3.2, 13.6, 14.4); // (v79) theo ô cửa MỚI 6,4
   addCollider(3.2, 11.2, 13.6, 14.4); // (v79)
   // (v51) KHUNG CỬA CHÍNH HẠ THẤP + ĐỔI SANG CHỮ NHẬT: khung vòm cũ
@@ -8880,7 +8961,7 @@ function yardFloorY(x, z){
   // là 3 bậc đá −0,45/−0,90/−1,35 xuống vành khuôn viên −1,8 (bản
   // cũ phiến sân cụt ở x ±20, dưới là vành trơ không bậc — ảnh 200
   // của Trí: "lỗi mất bậc cấp"). Hình học ở buildFrontYard.
-  if (ax > 20 && ax <= 21.8 && z >= 13.45 && z <= 42.6) return -0.45 * (1 + Math.min(2, Math.floor((ax - 20) / 0.6)));
+  if (ax > 20 && ax <= 21.8 && z >= 13.45 && z <= 40.35) return -0.45 * (1 + Math.min(2, Math.floor((ax - 20) / 0.6))); // (v99) dung o 40,35 — doan duoi thua z 40,35..42,6 da cat khoi hinh hoc (anh 559), phia nam do la vanh -1,8
   if (x >= -9.3 && x <= 9.3 && z >= -44.6 && z < -36.6) return 0.5; // (v67) sàn PHÒNG THÁNH sau cung thánh (cao bằng bệ 0,5)
   if (ax <= 18.5 && z >= -36.6) return 0; // (v67) lòng nhà thờ theo bề ngang ±18,2 // (v67) trong lòng nhà thờ theo bề ngang MỚI ±16,2 — bản cũ giới hạn |x| 11,6 (thời tường ±11,2) nên từ v66 cả dải sàn hai lối hông + tòa giải tội bị tính −1,8: nhân vật CHÌM xuống lòng đất đúng lỗi Trí báo tối 11/11
   // (v67) THỀM + BẬC CỬA HÔNG (z −22): landing 0, ba bậc −0,45/−0,90/−1,35 xuống vành −1,8 — khớp hình học buildSideDoors
@@ -8918,11 +8999,13 @@ const SPIRAL = { cx: 11.3, cz: 9.3, rIn: 2.15, rOut: 4.05 }; // (v83) thang xo�
 function spiralDist(x, z){ return Math.hypot(x - SPIRAL.cx, z - SPIRAL.cz); }
 function spiralRel(x, z){ return (x - 5.9) / 10.44 * (Math.PI * 1.5); } // (v93) THANG THANG: rel = tien trien doc truc x (chan 5,9 -> dinh 16,34) quy ve sweep de spiralRawP giu nguyen nghia 0..1
 function inSpiralZone(x, z){
+  return false; // (v99) CAU THANG DA XOA tam thoi — vo hieu hoa vung leo thang (nen duoi thang nay la san nave di binh thuong)
   if (x >= 5.3 && x <= 16.95 && z >= 8.3 && z <= 11.1) return true;
   if (Math.hypot(x - 4.9, z - 9.7) < 1.3) return true;
   return false;
 } // (v93) vung THANG THANG: chu nhat quanh dai thang + dem chan thang // (v79) vùng thang ĐÁ (chữ nhật quanh dải thang)
 function inSpiralRun(x, z){
+  return false; // (v99) CAU THANG DA XOA tam thoi
   return x >= 5.55 && x <= 16.3 && z >= 8.7 && z <= 10.7;
 } // (v93) dai di duoc cua THANG THANG: tren mat bac, rong 2,0 quanh truc z 9,7
 function spiralAngle(x, z){ return Math.atan2(z - SPIRAL.cz, x - SPIRAL.cx); }
@@ -8935,7 +9018,7 @@ function spiralHeightOf(a){
   return LOFT_Y * Math.max(0, Math.min(1, raw)); // (v93) kep tien trien thang thang trong [0,1]
 }
 /* khoảng hở GIẾNG THANG XOẮN trong sàn gác (khớp các mảnh sàn ở buildLoft) */
-function inStairwell(x, z){ return x > 13.25 && x < 16.1 && z > 8.4 && z < 11.0; } // (v93) GIENG THANG THANG: khoang ho chu nhat trong san gac noi bac thang troi len (x 13,3..16,55, z 8,45..10,95); phia dong x >= 16,6 la SAN DAP
+function inStairwell(x, z){ return false; } // (v99) GIENG DA LAP KIN thanh san gac lien — khong con khoang ho // (v93) GIENG THANG THANG: khoang ho chu nhat trong san gac noi bac thang troi len (x 13,3..16,55, z 8,45..10,95); phia dong x >= 16,6 la SAN DAP
 const GALLERY_STRIPS = [ // (v66) hai dai hanh lang gac doc tuong hong (xem buildLoft)
   { minX: -17.65, maxX: -12.05, minZ: -35.9, maxZ: 6.1 }, // (v72) hành lang KÉO DÀI sát vách sau theo yêu cầu của Trí (ảnh 331): z −21 -> −35,9
   { minX: 12.05, maxX: 17.65, minZ: -35.9, maxZ: 6.1 }, // (v72) như phía tây
@@ -9179,6 +9262,7 @@ function moveLevelOf(a){
    - mức high ngoài dải thang: luật sàn gác (loftCollides);
    - mức low: luật tầng trệt (collides). */
 function stairMass(x, z){ // (v91) KHOI THANG XOAN theo vanh quanh tam (11,3; 9,3): r 1,80..4,45 + rel 0,30..sweep+0,30; chua cua vao chan thang (dai di r 2,8..3,4 tai raw < 0,10)
+  return false; // (v99) CAU THANG DA XOA — khoi thang khong con, mat dat duoi gac nam di lai binh thuong
   return x > 7.1 && x < 16.6 && z > 8.5 && z < 10.9;
 } // (v93) khoi duoi gam THANG THANG: chan nguoi mat dat di vao duoi dai thang, chua doan cua vao o chan (noi bat trang thai leo)
 function canStandNave(a, x, z){
@@ -9983,6 +10067,13 @@ function buildChristmas(){
   }
   const treeLight = new THREE.PointLight(0xffc98a, 9, 13, 1.8);
   treeLight.position.set(0, 0.9, 50); yard.add(treeLight);
+  // (v99) DEN SANG NGOAI SAN o che do Giang Sinh theo phan anh cua Tri (anh 561: "che do giang sinh bi mat den sang ben ngoai"): 6 coc den san von chi co bong phat sang (emissive) chu KHONG co PointLight that nen dem GS san toi om quanh coc — nay them den am + quang sang tai dung vi tri bong (yardLampPos), chi ton tai trong nhom yard cua Giang Sinh nen tat GS la tat theo.
+  for (const [lx, lz] of (yardLampPos.length ? yardLampPos : [[-8, 46], [8, 46], [-8, 53], [8, 53], [-13, 30], [13, 30]])){
+    const ly = yardFloorY(lx, lz);
+    const pl = new THREE.PointLight(0xffbe78, 7, 12, 1.8);
+    pl.position.set(lx, ly + 2.9, lz); yard.add(pl);
+    addGlow(lx, ly + 2.95, lz, 1.6, 0.22, yard);
+  }
   /* (v80) CÂY THÔNG TO Ở GIỮA TẦNG 2 theo yêu cầu của Trí (ảnh 381):
      đứng giữa dải gác trước tại (0, LOFT_Y, 9.6) — từ dưới nave nhìn
      lên là thấy cây ngay giữa gác, trên đầu cửa chính. Thuộc nhóm
@@ -10052,7 +10143,11 @@ function buildChristmas(){
     const wIn = mkWreath(); wIn.position.set(-dp.sx * 1.6, 0.2, -0.17); wIn.rotation.y = Math.PI; dp.pivot.add(wIn); xmasDoorDecor.push(wIn); // (v79)
   }
   const gOut = mkGarland(7.5); gOut.position.set(0, 7.66, 14.62); yard.add(gOut);   // (v79) dây lá võng trên khung cửa chính MỚI — mặt sân
-  const gIn = mkGarland(7.5); gIn.position.set(0, 7.66, 13.52); gIn.rotation.y = Math.PI; nave.add(gIn); // (v79) — mặt trong nhà thờ
+  const gIn = mkGarland(7.5); gIn.position.set(0, 7.66, 13.52); gIn.rotation.y = Math.PI; nave.add(gIn);
+  // (v99) DEN LAP LANH BEN TRONG nha tho o che do Giang Sinh theo yeu cau cua Tri (18/11 22:27): (a) ba nhip day vong theo tay vin lan can mat truoc gac dan (z 5,78, cao LOFT_Y + 1,28); (b) day bong doc hai tuong hong o cao 5,6 phia tren cac o vom thanh tang tret; (c) hai day dung om hai ben vom cung thanh (x ±4,9, z -35,55) lam khung sang cho cung thanh ma khong cat ngang Thanh Gia lon.
+  for (const [gx0, gx1] of [[-12, -4], [-4, 4], [4, 12]]) xmasString(nave, gx0, LOFT_Y + 1.28, 5.78, gx1, LOFT_Y + 1.28, 5.78, 16, 0.34, 0.5);
+  for (const sx of [-1, 1]) xmasString(nave, sx * 17.8, 5.6, 12.5, sx * 17.8, 5.6, -35.5, 84, 0.15, 0.55);
+  for (const sx of [-1, 1]) xmasString(nave, sx * 4.9, 16, -35.55, sx * 4.9, 6.5, -35.55, 18, 0.04, 0.5); // (v79) — mặt trong nhà thờ
   const doorLight = new THREE.PointLight(0xffc98a, 6, 10, 1.8); doorLight.position.set(0, 4.4, 15.9); yard.add(doorLight); // đèn ấm đón khách trước cửa chính
   for (const sx of [-1, 1]){ // hai thông đèn nhỏ ôm thềm cửa chính
     const fx = sx * 4.1, fz = 16.6;
@@ -10159,6 +10254,9 @@ function buildChristmas(){
   // (v84) DÂY ĐÈN TỪ THÁNH GIÁ ĐỈNH HAI THÁP CHUÔNG xuống hai trụ cổng theo yêu cầu của Trí (ảnh 439): neo đúng thân Thánh Giá vàng trên đỉnh mỗi tháp (±13,8; 28,9; 15,25), võng 2,6, bóng thưa 0,62 như cặp dây đỉnh hồi
   xmasString(yard, -13.8, 28.9, 15.25, -3.4, 3.55, 56.2, 72, 2.6, 0.62);
   xmasString(yard, 13.8, 28.9, 15.25, 3.4, 3.55, 56.2, 72, 2.6, 0.62);
+  // (v99) DEN LAP LANH QUANH TUONG NGOAI nha tho o che do Giang Sinh theo yeu cau cua Tri (18/11 22:27): day bong mau chay doc mep tren hai tuong hong (x ±18,66 — ap mat ngoai tuong, y 19,35 sat duoi dinh tuong 20, tu mat tien z 13,6 toi vach sau -36,2) + mot day khop vong qua tuong sau; bong dung chung vat lieu mau trong xmasTwinkles nen nhap nhay lap lanh nhu moi day den GS khac.
+  for (const sx of [-1, 1]) xmasString(yard, sx * 18.66, 19.35, 13.6, sx * 18.66, 19.35, -36.2, 90, 0.18, 0.55);
+  xmasString(yard, -18.66, 19.35, -36.2, 18.66, 19.35, -36.2, 68, 0.18, 0.55);
   // (v63) GỠ CẢ HAI dây THÁP (tây -8,8 và đông +8,8; 10,6; 15,2 -> hai trụ cổng) theo ảnh khoanh đỏ của Trí gửi 06:02 11/11 ("xoá thanh ngang trong vùng màu đỏ"): vùng khoanh là góc trời bên trái mặt tiền, trong đó có dây đỉnh hồi -> cổng tây VÀ dây tháp tây; bỏ dây tháp tây mà giữ dây tháp đông sẽ lệch đối xứng mặt tiền (ảnh kiểm chứng v63c: bên phải còn dây xiên, bên trái trống). Gỡ cả cặp tháp cho cân; cặp dây ĐỈNH HỒI (0; 12,6 -> hai trụ cổng) giữ nguyên — nằm ngoài vùng khoanh, là trục đèn chính của sân.
   // dây bóng màu giăng ngang sân trước mặt tiền (giữa các cọc đèn)
   // (v54 — ảnh 231) dây ngang z 30 NÂNG LÊN 3,7 + giảm võng 0,7:
@@ -10472,7 +10570,7 @@ function initThree(){
      EffectComposer (xem cuối mainLoop) nên nằm NGOÀI đường bloom — khử tận
      gốc lỗi biển tên bị kéo nhoè/bóng ma dù chữ có sáng đến đâu. */
   labelScene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, 0.1, 300); // (v84) FOV 55 -> 62: góc nhìn rộng thêm theo yêu cầu của Trí (ảnh 439) — đứng ở sân thấy được cả Thánh Giá trên tháp phía trái trong cùng khung hình
+  camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, 0.3, 300); // (v84) FOV 55 -> 62: góc nhìn rộng thêm theo yêu cầu của Trí (ảnh 439) — đứng ở sân thấy được cả Thánh Giá trên tháp phía trái trong cùng khung hình // (v99) near 0,1 -> 0,3: mat cat gan xa hon giup buffer do sau chinh xac hon ~3 lan o tam xa — mot nguon soc nhap nhay tren nen san khi di chuyen/xoay camera (video Tri gui 22:26 18/11)
   clock = new THREE.Clock();
   FLAME_TEX = flameTexture();
   GLOW_TEX = glowTexture();
@@ -11716,7 +11814,7 @@ function refreshPrompt(){
     // (v42 — điểm 29) NÚT LÊN/XUỐNG GÁC theo THANG XOẮN: trệt gần
     // CHÂN thang (cửa Nam) -> "Lên gác"; trên gác gần điểm ĐÁP ->
     // "Xuống"; đang xoắn ở nửa trên -> "Xuống", nửa dưới -> "Lên gác".
-    if (me.zone === "nave" && !me.sit && !me.kneel){
+    if (false && me.zone === "nave" && !me.sit && !me.kneel){ // (v99) an han nut Len/Xuong tang — cau thang da xoa tam thoi
       if (me.spiralP != null) { if (me.spiralP > 0.5) stairDown = true; else stairUp = true; }
       else if (!me.onLoft && Math.hypot(me.x - SPIRAL_FOOT_PT.x, me.z - SPIRAL_FOOT_PT.z) < 2.6) stairUp = true;
       else if (me.onLoft && Math.hypot(me.x - SPIRAL_TOP_PT.x, me.z - SPIRAL_TOP_PT.z) < 2.6) stairDown = true;
@@ -13177,9 +13275,14 @@ function rosarySVG(idx){
   // Ánh xạ bước kinh -> hạt: hạt lớn của chục d gánh cả Kinh Lạy Cha của chục d
   // và Kinh Sáng Danh của chục trước (đúng như lần chuỗi thật trên cùng một hạt).
   const beadCls = steps => steps.includes(idx) ? "rb rb-now" : (Math.max(...steps) < idx ? "rb rb-done" : "rb");
-  const bead = (x, y, r, fill, stroke, steps, extra = "") =>
-    `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="1" class="${beadCls(steps)}" ${extra}/>` +
+  const bead = (x, y, r, fill, stroke, steps, extra = "") => {
+    const now = steps.includes(idx); // (v99) hat dang doc: them VONG HALO vang + phong to 1,32 lan — nhin la thay ngay ca khi vong da xoay
+    const halo = now ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r + 5.5).toFixed(1)}" fill="rgba(255,217,77,.16)" stroke="#ffd94d" stroke-width="2.4" class="rb-halo"/>` : "";
+    const rr = now ? r * 1.32 : r;
+    return halo +
+    `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr}" fill="${fill}" stroke="${stroke}" stroke-width="1" class="${beadCls(steps)}" ${extra}/>` +
     `<ellipse cx="${(x - r * 0.3).toFixed(1)}" cy="${(y - r * 0.38).toFixed(1)}" rx="${(r * 0.3).toFixed(1)}" ry="${(r * 0.2).toFixed(1)}" fill="rgba(255,255,255,.35)" class="${beadCls(steps)}"/>`;
+  };
   let s = `<svg viewBox="0 0 260 330" role="img" aria-label="Chuỗi Mân Côi">`;
   s += `<g class="rs-rot" transform="rotate(${rosRingRot} 130 112)">`;
   s += `<circle cx="130" cy="112" r="88" fill="none" stroke="#2e2119" stroke-width="2"/>`;
@@ -13204,10 +13307,12 @@ function rosarySVG(idx){
   s += bead(130, 261, 6, "#6b4a2f", "#93765a", [3]);
   s += bead(130, 277, 6, "#6b4a2f", "#93765a", [4]);
   // mặt trung tâm vàng với chữ M (bước 5 và Sáng Danh cuối chục 5 = bước 65)
+  if (idx === 5 || idx === 65) s += `<circle cx="130" cy="200" r="18.5" fill="rgba(255,217,77,.16)" stroke="#ffd94d" stroke-width="2.4" class="rb-halo"/>`; // (v99) halo cho mat trung tam
   s += `<circle cx="130" cy="200" r="12.5" fill="#c9a227" stroke="#8a6a1d" stroke-width="1.4" class="${beadCls([5, 65])}"/>`;
   s += `<circle cx="130" cy="200" r="9.2" fill="none" stroke="#8a6a1d" stroke-width="0.8" opacity="0.7"/>`;
   s += `<text x="130" y="200" text-anchor="middle" dominant-baseline="central" font-family="Georgia, serif" font-size="12.5" fill="#5d430f" font-weight="700">M</text>`;
   // Thánh Giá vàng cuối chuỗi (bước 0 mở đầu và bước 66 kết thúc)
+  if (idx === 0 || idx === 66) s += `<circle cx="130" cy="305" r="21" fill="rgba(255,217,77,.16)" stroke="#ffd94d" stroke-width="2.4" class="rb-halo"/>`; // (v99) halo cho Thanh Gia mo dau/ket thuc
   s += `<g fill="#c9a227" stroke="#8a6a1d" stroke-width="0.8" class="${beadCls([0, 66])}">` +
        `<rect x="127.2" y="290" width="5.6" height="30" rx="2"/><rect x="121.4" y="299" width="17.2" height="5.2" rx="2"/></g>`;
   s += `</svg>`;
