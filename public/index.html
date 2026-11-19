@@ -904,10 +904,11 @@ const bootT0 = performance.now();
 /* NHÃN PHIÊN BẢN — hằng số DUY NHẤT của bản giao hàng: tăng số này ở mỗi đợt
    giao (v8, v9, ...) và ghi cùng số vào đầu README. Hiện nhỏ ở màn hình tải
    để người dùng nhìn là biết mình đang chạy bản nào, tránh lẫn bản cũ do cache. */
-const APP_VERSION = "v102";
+const APP_VERSION = "v105";
 const QUALITY = (() => { const coarse = matchMedia("(pointer: coarse)").matches; const minSide = Math.min(screen.width, screen.height); const mob = coarse && minSide <= 1100; const phone = coarse && minSide <= 520; return { mobile: mob, phone, pixelCap: 2, shadow: phone ? 1024 : mob ? 1536 : 2048 }; })(); // (v101) phone: bong do 1024 cho muot (v99 tung de 1536) // (v95) phat hien dien thoai/tablet nho de chay che do nhe; (v99) Tri bao dien thoai "do hoa trong rat xau" — nguyen nhan chinh la pixelCap 1,25 lam mo nho: nang len 2 nhu may tinh, bu lai bang giam draw call (InstancedMesh con tien) + governor nhe tay hon
 /* (v96) BO TU DIEU CHINH DO HOA theo yeu cau cua Tri (dien thoai + may tinh "doi luc van giat lag"): do toc do khung hinh that — khung cham keo dai thi TU HA do phan giai render theo nac, nac cao nhat tat ca bloom; het nang thi tu nang lai (co do tre chong nhay nac). */
 let qLevel = 0, qFrames = 0, qAcc = 0, qLastT = 0, qCoolUntil = 0, qGoodStreak = 0, composerOff = false;
+let shadowTick = 0; // (v103) dem khung cho nhip ve lai bong do tren phone
 const Q_SCALES = [1, 0.88, 0.78, 0.7]; // (v99) nac ha nhe hon han (cu 0,8/0,62/0,48 lam hinh xau ro sau vai phut choi)
 function qApply(){
   if (!renderer) return;
@@ -916,7 +917,7 @@ function qApply(){
   renderer.setPixelRatio(pr);
   renderer.setSize(innerWidth, innerHeight);
   if (composer){ composer.setPixelRatio(pr); composer.setSize(innerWidth, innerHeight); }
-  composerOff = qLevel >= 3;
+  composerOff = qLevel >= (QUALITY.phone ? 2 : 3); // (v103) phone tat bloom som tu nac 2 (bloom toan man hinh o pixelRatio cao la nang nhat tren GPU dien thoai)
 }
 function qGovern(){
   const now = performance.now();
@@ -924,7 +925,7 @@ function qGovern(){
   const dt = now - qLastT; qLastT = now;
   if (dt > 250) return; // khung dung lau (chuyen tab / vua tai xong) khong tinh la lag
   qAcc += dt; qFrames++;
-  if (qFrames < 80) return;
+  if (qFrames < (QUALITY.phone ? 40 : 80)) return; // (v103) phone: cua so 40 khung — ban cu 80 khung o 10fps la 8 giay moi ha nac do hoa, qua cham
   const avg = qAcc / qFrames; qAcc = 0; qFrames = 0;
   if (now < qCoolUntil) return;
   if (avg > 30 && qLevel < 3){ qLevel++; qGoodStreak = 0; qCoolUntil = now + 8000; qApply(); }
@@ -10333,15 +10334,84 @@ function buildChristmas(){
      Bỏ hẳn đèn sao treo dọc lối giữa + dây dọc đầu ghế của v42. Kiểu
      mới: DÂY ĐÈN VÕNG dọc hai bờ tường thành tầng 2 (dưới hàng tranh
      14 chặng) + dây lan can gác đàn + LED viền vòm cung thánh + đèn
-     ấm tăng cường độ — bật Giáng Sinh là nhà thờ sáng ấm, không tối. */
+     ấm tăng cường độ — bật Giáng Sinh là nhà thờ sáng ấm, không tối.
+     (v104) dây đèn lan can tầng trên ĐÃ BỎ theo yêu cầu Trí — thay bằng vòng nguyệt quế treo + châu/sao vàng treo. */
   {
-    for (const sx of [-1, 1])
-      for (let i = 0; i < 4; i++){
-        const z0 = -20.5 + i * 6.5;
-        xmasString(nave, sx * 12.22, LOFT_Y + 1.06, z0, sx * 12.22, LOFT_Y + 1.06, z0 + 6.5, 12, 0.38); // (v67) dây theo LAN CAN ĐÁ hành lang mới (x ±12,15) // (v66) võng đèn dọc LAN CAN HANH LANG GAC (truoc treo doc tuong tang 2 — nay co hanh lang nen treo theo lan can)
+    // (v104) VAT TREO thay day den lan can (Tri 22:39: vat treo TO HON + trang tri them tuong xung quanh):
+    // vong nguyet que lon treo ruy bang do + cum chau/sao vang treo o lan can gac/hanh lang,
+    // vong nguyet que gan tuong hai ben hong (tang gac + tang tret tren ban nen) va tuong sau gac.
+    const _wrGeo104 = new THREE.TorusGeometry(0.46, 0.105, 8, 22);
+    const _wrGeoS104 = new THREE.TorusGeometry(0.36, 0.085, 8, 20);
+    const _wrGeoW104 = new THREE.TorusGeometry(0.55, 0.11, 8, 24);
+    const _bbGeo104 = new THREE.SphereGeometry(0.07, 10, 8);
+    const _starGeo104 = new THREE.OctahedronGeometry(0.23);
+    const _red104 = new THREE.MeshStandardMaterial({ color: 0x9e2b25, roughness: 0.55 });
+    const _cord104 = new THREE.MeshStandardMaterial({ color: 0xc9a227, roughness: 0.35, metalness: 0.7 });
+    const _bulbGeo105 = new THREE.SphereGeometry(0.042, 8, 6); // (v105) bong den am nho tren vong
+    const _bulb105 = new THREE.MeshStandardMaterial({ color: 0xffe2b0, emissive: 0xffbe78, emissiveIntensity: 1.7, roughness: 0.4 });
+    _bulb105.userData.phase = 0.35; if (!xmasTwinkles.includes(_bulb105)) xmasTwinkles.push(_bulb105); // (v105) nhap nhay cung he den Giang Sinh
+    const _goldLit105 = new THREE.MeshStandardMaterial({ color: 0xd9a83f, emissive: 0xff9d2e, emissiveIntensity: 0.5, roughness: 0.35, metalness: 0.6 }); // (v105) vang phat sang cho sao/chau cum treo
+    function wreathMesh104(geo, R, tube){
+      const g = new THREE.Group();
+      const wr = new THREE.Mesh(geo, MAT.leaf); g.add(wr);
+      for (let i = 0; i < 8; i++){
+        const a = i / 8 * Math.PI * 2 + 0.4;
+        const b = new THREE.Mesh(_bbGeo104, i % 2 ? MAT.gold : _red104);
+        b.position.set(Math.cos(a) * R, Math.sin(a) * R, tube); g.add(b);
       }
-    xmasString(nave, -13.3, LOFT_Y + 1.0, 5.98, 0, LOFT_Y + 1.0, 5.98, 24, 0.16); // dây đèn lan can gác (2 nhịp)
-    xmasString(nave, 0, LOFT_Y + 1.0, 5.98, 13.3, LOFT_Y + 1.0, 5.98, 24, 0.16);
+      const bow = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.12, 0.05), _red104); bow.position.set(0, R + 0.02, tube - 0.01); g.add(bow);
+      for (let i = 0; i < 8; i++){ // (v105) bong am xen giua cac chau tren vong
+        const a = i / 8 * Math.PI * 2 + 0.4 + Math.PI / 8;
+        const bl = new THREE.Mesh(_bulbGeo105, _bulb105);
+        bl.position.set(Math.cos(a) * R, Math.sin(a) * R, tube + 0.02); g.add(bl);
+      }
+      return g;
+    }
+    function hangWreath104(x, yTop, z, ry, small){
+      const g = new THREE.Group();
+      const rib = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.62, 0.02), _red104); rib.position.set(0, -0.31, 0); g.add(rib);
+      const R = small ? 0.36 : 0.46;
+      const wm = wreathMesh104(small ? _wrGeoS104 : _wrGeo104, R, small ? 0.085 : 0.105);
+      wm.position.set(0, -0.62 - R, 0); g.add(wm);
+      if (!small) addGlow(0, -0.62 - R, 0.1, 1.5, 0.13, g); // (v105) quang sang mem sau vong lon mat truoc
+      g.position.set(x, yTop, z); g.rotation.y = ry; nave.add(g);
+    }
+    function hangDrop104(x, yTop, z, ry, star){
+      const g = new THREE.Group();
+      const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.55, 6), _cord104); cord.position.set(0, -0.275, 0); g.add(cord);
+      if (star){ const st = new THREE.Mesh(_starGeo104, _goldLit105); st.scale.set(1, 1.25, 0.35); st.position.set(0, -0.80, 0); g.add(st); }
+      else {
+        const c1 = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 10), _goldLit105); c1.position.set(0, -0.72, 0); g.add(c1);
+        const c2 = new THREE.Mesh(new THREE.SphereGeometry(0.10, 10, 8), _red104); c2.position.set(0.16, -0.88, 0.03); g.add(c2);
+        const c3 = new THREE.Mesh(new THREE.SphereGeometry(0.10, 10, 8), MAT.gold); c3.position.set(-0.16, -0.88, 0.03); g.add(c3);
+      }
+      addGlow(0, star ? -0.80 : -0.78, 0, 1.0, 0.20, g); // (v105) quang sang mem quanh cum treo
+      g.position.set(x, yTop, z); g.rotation.y = ry; nave.add(g);
+    }
+    function wallWreath104(x, y, z, ry){
+      const g = new THREE.Group();
+      const rib = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.7, 0.02), _red104); rib.position.set(0, 0.80, 0); g.add(rib);
+      g.add(wreathMesh104(_wrGeoW104, 0.55, 0.11));
+      g.position.set(x, y, z); g.rotation.y = ry; nave.add(g);
+    }
+    // lan can mat truoc gac: 8 vong lon xen 7 cum treo
+    for (let i = 0; i < 8; i++) hangWreath104(-11.55 + i * 3.3, LOFT_Y + 1.10, 5.80, 0, false);
+    for (let i = 0; i < 7; i++) hangDrop104(-9.90 + i * 3.3, LOFT_Y + 1.10, 5.82, 0, i % 2 === 0);
+    for (const lx of [-8, 0, 8]){ const pl = new THREE.PointLight(0xffc98a, 4, 9, 1.8); pl.position.set(lx, LOFT_Y + 0.3, 5.3); nave.add(pl); } // (v105) 3 den am that do sang mem xuong long nha tho truoc gac
+    // hai lan can hanh lang: vong vua xen cum treo, mat huong vao long nha tho
+    for (const sx of [-1, 1]){
+      for (let i = 0; i < 8; i++){
+        const z = -18.9 + i * 3.25;
+        if (i % 2 === 0) hangWreath104(sx * 11.90, LOFT_Y + 1.10, z, sx > 0 ? -Math.PI / 2 : Math.PI / 2, true);
+        else hangDrop104(sx * 11.90, LOFT_Y + 1.10, z, sx > 0 ? -Math.PI / 2 : Math.PI / 2, i % 4 === 1);
+      }
+      // tuong hong tang gac: vong lon gan tuong giua cac o kinh mau
+      for (const z of [4.5, -4.5, -13.5, -22.5, -30.0]) wallWreath104(sx * 17.46, LOFT_Y + 4.3, z, sx > 0 ? -Math.PI / 2 : Math.PI / 2);
+      // tuong hong tang tret: vong lon tren hai ban nen tuong
+      for (const z of [-9.0, 0.0]) wallWreath104(sx * 17.42, 4.6, z, sx > 0 ? -Math.PI / 2 : Math.PI / 2);
+    }
+    // tuong sau phia tren gac dan: 3 vong lon
+    for (const x of [-8, 0, 8]) wallWreath104(x, LOFT_Y + 4.6, 13.42, Math.PI);
     // (v72) ĐÃ XÓA dây đèn LED quanh khung vòm cung thánh theo yêu cầu của Trí (ảnh 338) — cung thánh giữ trang trí nến + đèn chùm như thường
     const warm = new THREE.PointLight(0xffc98a, 7, 16, 1.8); // sắc ấm lễ hội giữa lòng nhà thờ (v48: tăng 5 -> 7 cho sáng)
     warm.position.set(0, 6.6, -8); nave.add(warm);
@@ -10570,6 +10640,7 @@ function initThree(){
   renderer.setSize(innerWidth, innerHeight);
   renderer.shadowMap.enabled = true; // (v35) bóng đổ thật — chỉ đèn chính (sun) cast, vùng bóng giới hạn ở buildWorld
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  if (QUALITY.phone) renderer.shadowMap.autoUpdate = false; // (v103) phone: bong do chi ve lai 1/2 so khung (mainLoop set needsUpdate xen ke) — cat mot nua chi phi render bong moi khung
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.95; // (v39) 1,12 -> 0,95: trong nhà thờ hết cháy trắng mà vẫn sáng thoáng
@@ -10705,7 +10776,7 @@ function navSnapFree(idx){
 }
 function navLineClear(x1, z1, x2, z2){
   const d = Math.hypot(x2 - x1, z2 - z1);
-  const steps = Math.max(1, Math.ceil(d / 0.2));
+  const steps = Math.max(1, Math.ceil(d / 0.3));
   for (let i = 1; i < steps; i++){
     const t = i / steps;
     if (collides(x1 + (x2 - x1) * t, z1 + (z2 - z1) * t) || stairMass(x1 + (x2 - x1) * t, z1 + (z2 - z1) * t)) return false; // (v91) duong thang khong cat khoi thang
@@ -10720,10 +10791,11 @@ function computeWalkPath(sx, sz, tx, tz){
   const goal = navSnapFree(navCellOf(tx, tz));
   if (start < 0 || goal < 0 || start === goal) return [];
   const cols = NAV.cols, rows = NAV.rows, grid = NAV.grid;
-  const gScore = new Float32Array(cols * rows).fill(Infinity);
-  const fScore = new Float32Array(cols * rows).fill(Infinity);
-  const came = new Int32Array(cols * rows).fill(-1);
-  const closed = new Uint8Array(cols * rows);
+  if (!computeWalkPath._buf || computeWalkPath._buf.g.length !== cols * rows) computeWalkPath._buf = { g: new Float32Array(cols * rows), f: new Float32Array(cols * rows), c: new Int32Array(cols * rows), cl: new Uint8Array(cols * rows) }; // (v103) tai dung bo dem A*: ban cu cap phat moi ~720KB moi lan tinh duong -> rac bo nho + dung khung GC tren may yeu
+  const gScore = computeWalkPath._buf.g.fill(Infinity);
+  const fScore = computeWalkPath._buf.f.fill(Infinity);
+  const came = computeWalkPath._buf.c.fill(-1);
+  const closed = computeWalkPath._buf.cl.fill(0);
   const gc = goal % cols, gr = (goal / cols) | 0;
   const heur = i => {
     const dx = Math.abs((i % cols) - gc), dy = Math.abs(((i / cols) | 0) - gr);
@@ -10734,13 +10806,14 @@ function computeWalkPath(sx, sz, tx, tz){
   const heapPush = v => { heap.push(v); let i = heap.length - 1; while (i > 0){ const p = (i - 1) >> 1; if (fScore[heap[p]] <= fScore[heap[i]]) break; const t = heap[p]; heap[p] = heap[i]; heap[i] = t; i = p; } };
   const heapPop = () => { const top = heap[0], last = heap.pop(); if (heap.length){ heap[0] = last; let i = 0; for (;;){ const l = i * 2 + 1, r2 = l + 1; let m = i; if (l < heap.length && fScore[heap[l]] < fScore[heap[m]]) m = l; if (r2 < heap.length && fScore[heap[r2]] < fScore[heap[m]]) m = r2; if (m === i) break; const t = heap[m]; heap[m] = heap[i]; heap[i] = t; i = m; } } return top; };
   const DIRS = [[1, 0, 1], [-1, 0, 1], [0, 1, 1], [0, -1, 1], [1, 1, Math.SQRT2], [1, -1, Math.SQRT2], [-1, 1, Math.SQRT2], [-1, -1, Math.SQRT2]];
-  let found = false, expanded = 0;
+  let found = false, expanded = 0, bestI = start, bestH = heur(start); // (v103) bestI = o da mo GAN DICH nhat (cho duong mot phan khi cham tran)
   while (heap.length){
     if (++expanded > 26000) break; // (v101) van an toan chong treo trang (Tri bao 23:08 thinh thoang treo ca trang): duong qua dai/xau thi dung som, vong bam theo tu xu ly tiep — khong de mot lan tim duong khoa khung hinh hang tram ms
     const cur = heapPop();
     if (cur === goal){ found = true; break; }
     if (closed[cur]) continue;
     closed[cur] = 1;
+    { const _h103 = heur(cur); if (_h103 < bestH){ bestH = _h103; bestI = cur; } }
     const cc = cur % cols, cr = (cur / cols) | 0;
     for (let k = 0; k < DIRS.length; k++){
       const dc = DIRS[k][0], dr = DIRS[k][1], cost = DIRS[k][2];
@@ -10753,9 +10826,10 @@ function computeWalkPath(sx, sz, tx, tz){
       if (ng < gScore[ni]){ gScore[ni] = ng; fScore[ni] = ng + heur(ni); came[ni] = cur; heapPush(ni); }
     }
   }
-  if (!found) return [];
+  if (!found && bestI === start) return [];
+  const endI = found ? goal : bestI; // (v103) khong toi dich (cham tran mo o / dich bi bit kin) thi di toi o gan dich nhat da mo duoc thay vi tra duong rong: ban cu nhan vat dung chet tai cho roi vong ket cu tinh lai duong lien tuc — mot nguon giat/dung tren may yeu
   const cells = [];
-  for (let cur = goal; cur !== -1 && cur !== start; cur = came[cur]) cells.push(cur);
+  for (let cur = endI; cur !== -1 && cur !== start; cur = came[cur]) cells.push(cur);
   cells.reverse();
   let pts = cells.map(i => ({ x: NAV.x0 + ((i % cols) + 0.5) * NAV.cell, z: NAV.z0 + (((i / cols) | 0) + 0.5) * NAV.cell }));
   // kéo thẳng: từ vị trí hiện tại, nhảy tới điểm mốc XA NHẤT còn nhìn thấy rõ
@@ -10782,7 +10856,7 @@ function computeWalkPath(sx, sz, tx, tz){
    stepLocalPlayer tự dùng clickTarget làm đích chót). */
 function loftLineClear(x1, z1, x2, z2){
   const d = Math.hypot(x2 - x1, z2 - z1);
-  const steps = Math.max(1, Math.ceil(d / 0.2));
+  const steps = Math.max(1, Math.ceil(d / 0.3));
   for (let i = 1; i < steps; i++){
     const t = i / steps;
     if (loftCollides(x1 + (x2 - x1) * t, z1 + (z2 - z1) * t)) return false;
@@ -12354,7 +12428,7 @@ function stepLocalPlayer(dt){
     if (Math.hypot(me.x - stuckX, me.z - stuckZ) > 0.2){ stuckT = 0; stuckX = me.x; stuckZ = me.z; }
     else {
       stuckT += dt;
-      if (stuckT > 1){ // kẹt quá 1 giây: tính lại đường từ vị trí hiện tại
+      if (stuckT > 1.8){ // (v103) ket qua 1,8 giay moi tinh lai duong (ban cu 1s: tren may yeu moi lan tinh lai la mot lan A* hang tram ms -> giat lien tuc khi ket)
         stuckT = 0; stuckX = me.x; stuckZ = me.z;
         const lineClear = clickTarget.level === "loft" ? loftLineClear(me.x, me.z, clickTarget.x, clickTarget.z) : navLineClear(me.x, me.z, clickTarget.x, clickTarget.z);
         if (Math.hypot(me.x - clickTarget.x, me.z - clickTarget.z) < 0.6 && !lineClear){
@@ -14040,14 +14114,27 @@ async function loadModelsThenWorld(){
   // và chỉ khi loa đang bật (mặc định bật cho nhạc nền, lựa chọn được nhớ).
   addEventListener("pointerdown", () => musicUnlock(), { once: true });
   if (QUALITY.phone){ qLevel = 1; qApply(); } // (v101) phone khoi dong san o nac do hoa nhe cho muot ngay tu dau (Tri bao iPhone khong muot nhu may tinh); governor van tu nang lai khi may chay tot
+  // (v103) LAM AM TRUOC tren man hinh cho: dung san luoi A* (ban cu de lan cham-di dau tien dung toan bo 59.840 o trong mot khung) va bien dich san shader cho MOI khu gom ca nhom Giang Sinh (ban cu lan dau qua cua/doi khu moi bien dich -> dung hinh thay ro, nhat la dien thoai). Hitch dua het ve man hinh cho, vao choi thi het.
+  if (!NAV.grid) navBuild();
+  {
+    const _nv103 = zoneNaveGroup.visible, _yv103 = zoneYardGroup.visible;
+    zoneNaveGroup.visible = true; zoneYardGroup.visible = true;
+    if (xmasGroups.yard) xmasGroups.yard.visible = true;
+    if (xmasGroups.nave) xmasGroups.nave.visible = true;
+    renderer.compile(scene, camera);
+    zoneNaveGroup.visible = _nv103; zoneYardGroup.visible = _yv103;
+    if (xmasGroups.yard) xmasGroups.yard.visible = xmasOn;
+    if (xmasGroups.nave) xmasGroups.nave.visible = xmasOn;
+  }
   renderer.setAnimationLoop(mainLoop);
 }
 boot();
 
 let promptTimer = 0;
 function mainLoop(){
-  const dt = Math.min(clock.getDelta(), 0.05);
+  const dt = Math.min(clock.getDelta(), 0.1); // (v103) ban cu kep 0,05: may chay duoi 20fps thi thoi gian game CHAM hon thoi gian that (10fps chi con nua toc do) — goc loi Tri bao dien thoai nhan vat di cham du v101 da bo kep 1/30 o buoc di; buoc di da chia nho <= 1/30 nen kep 0,1 van an toan
   const t = clock.elapsedTime;
+  if (QUALITY.phone && ((++shadowTick) % 2 === 0)) renderer.shadowMap.needsUpdate = true; // (v103) nhip bong do phone
   if (navChunksPending) navBuildChunk(); // (v57) dựng lưới A* theo mảnh ở nền (sau khi bật/tắt Giáng Sinh)
   stepLocalPlayer(dt);
   if (me) animateActor(me, dt, t);
