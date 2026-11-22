@@ -540,6 +540,13 @@ const NO_STORE = {
   "Pragma": "no-cache",
   "Expires": "0",
 };
+// (v113) CACHE RIENG cho tai nguyen nang it doi: model 3D (/models/) va
+// three.js (/vendor/) - trinh duyet giu ban sao nen cac lan vao sau gan
+// nhu khong phai tai lai (man hinh cho nhanh han). index.html va cac API
+// van NO_STORE nen ban moi dang len la duoc nhan ngay; model doi noi dung
+// thi toi da 1 gio sau moi lan tai lai.
+const MODEL_CACHE = { "Cache-Control": "public, max-age=3600" };
+const VENDOR_CACHE = { "Cache-Control": "public, max-age=604800" };
 const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".mjs": "text/javascript", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".ico": "image/x-icon", ".mp3": "audio/mpeg", ".ogg": "audio/ogg", ".m4a": "audio/mp4", ".txt": "text/plain; charset=utf-8", ".glb": "model/gltf-binary" }; // (v36) .glb: mô hình 3D thật trong public/models/
 const MUSIC_DIR = path.join(PUBLIC_DIR, "music");
 const httpServer = http.createServer((req, res) => {
@@ -559,7 +566,7 @@ const httpServer = http.createServer((req, res) => {
     if (!file || !file.startsWith(THREE_ADDONS_DIR)) { res.writeHead(404); return res.end("Not found"); }
     return fs.readFile(file, (err, data) => {
       if (err) { res.writeHead(404); return res.end("addon file not found — run: npm install"); }
-      res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", ...NO_STORE });
+      res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", ...VENDOR_CACHE });
       res.end(data);
     });
   }
@@ -569,7 +576,7 @@ const httpServer = http.createServer((req, res) => {
     if (!/^[\w][\w.\-]*\.js$/.test(name) || name.includes("..")) { res.writeHead(404); return res.end("Not found"); }
     return fs.readFile(path.join(THREE_DIR, name), (err, data) => {
       if (err) { res.writeHead(404); return res.end("vendor file not found — run: npm install"); }
-      res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", ...NO_STORE });
+      res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", ...VENDOR_CACHE });
       res.end(data);
     });
   }
@@ -894,10 +901,10 @@ const httpServer = http.createServer((req, res) => {
       if (start === null) { start = Math.max(0, st.size - (end || 0)); end = st.size - 1; }
       else if (end === null || end >= st.size) end = st.size - 1;
       if (start > end || start >= st.size) { res.writeHead(416, { "Content-Range": "bytes */" + st.size }); return res.end(); }
-      res.writeHead(206, { "Content-Type": type, "Content-Range": "bytes " + start + "-" + end + "/" + st.size, "Accept-Ranges": "bytes", "Content-Length": end - start + 1, ...NO_STORE });
+      res.writeHead(206, { "Content-Type": type, "Content-Range": "bytes " + start + "-" + end + "/" + st.size, "Accept-Ranges": "bytes", "Content-Length": end - start + 1, ...(p.startsWith("/models/") ? MODEL_CACHE : NO_STORE) });
       return fs.createReadStream(file, { start, end }).pipe(res);
     }
-    res.writeHead(200, { "Content-Type": type, "Accept-Ranges": "bytes", "Content-Length": st.size, ...NO_STORE });
+    res.writeHead(200, { "Content-Type": type, "Accept-Ranges": "bytes", "Content-Length": st.size, ...(p.startsWith("/models/") ? MODEL_CACHE : NO_STORE) });
     fs.createReadStream(file).pipe(res);
   });
 });
